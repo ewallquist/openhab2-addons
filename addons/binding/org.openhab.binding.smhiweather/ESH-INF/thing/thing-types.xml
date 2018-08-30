@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="smhiweather"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+        xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <!-- Sample Thing Type -->
+    <thing-type id="weather">
+        <label>Weather information from SMHI</label>
+        <description>Provides various weather data from the open SMHI REST API</description>
+
+        <channels>
+            <channel id="temperature" typeId="temperature" />
+            <channel id="humidity" typeId="humidity" />
+            <channel id="pressure" typeId="pressure" />
+            <channel id="wind_speed" typeId="wind_speed" />
+            <channel id="wind_direction" typeId="wind_direction" />
+            <channel id="thunder_probability" typeId="thunder_probability" />
+            <channel id="weather_symbol" typeId="weather_symbol" />
+        </channels>
+
+        <config-description>
+            <parameter name="longitude" type="integer" required="true">
+                <label>Longitude</label>
+                <description>Longitude location for the weather information.
+                </description>
+            </parameter>
+            <parameter name="latitude" type="integer" required="true">
+                <label>Latitude</label>
+                <description>Latitude location for the weather information.
+                </description>
+            </parameter>
+            <parameter name="refresh" type="integer" min="60">
+                <label>Refresh interval</label>
+                <description>Specifies the refresh interval in seconds.</description>
+                <default>300</default>
+            </parameter>
+        </config-description>
+    </thing-type>
+
+    <channel-type id="temperature">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>Current temperature in degrees celsius</description>
+        <category>Temperature</category>
+        <state readOnly="true" pattern="%.1f °C"></state>
+    </channel-type>
+
+    <channel-type id="humidity">
+        <item-type>Number</item-type>
+        <label>Humidity</label>
+        <description>Current humidity in %</description>
+        <category>Humidity</category>
+        <state readOnly="true" pattern="%d %%"></state>
+    </channel-type>
+
+    <channel-type id="pressure">
+        <item-type>Number</item-type>
+        <label>Pressure</label>
+        <description>Current pressure in millibar</description>
+        <category>Pressure</category>
+        <state readOnly="true" pattern="%.1f hPa"></state>
+    </channel-type>
+    
+    <channel-type id="wind_speed">
+        <item-type>Number</item-type>
+        <label>Wind Speed</label>
+        <description>Current wind speed in m/s</description>
+        <category>Wind</category>
+        <state readOnly="true" pattern="%.1f m/s"></state>
+    </channel-type>
+
+    <channel-type id="wind_direction">
+        <item-type>Number</item-type>
+        <label>Wind Direction</label>
+        <description>Current wind direction in degrees</description>
+        <category>Wind</category>
+        <state readOnly="true" pattern="%d degrees"></state>
+    </channel-type>
+    
+    <channel-type id="thunder_probability">
+        <item-type>Number</item-type>
+        <label>Thunder Probability</label>
+        <description>Thunder Probability in percent</description>
+        <category>Thunder</category>
+        <state readOnly="true" pattern="%d %%"></state>
+    </channel-type>
+    
+    <channel-type id="weather_symbol">
+        <item-type>Number</item-type>
+        <label>Weather Symbol</label>
+        <description>Weather Symbol</description>
+        <category>Symbol</category>
+        <state readOnly="true" pattern="%d"></state>
+    </channel-type>
+    
+</thing:thing-descriptions>
