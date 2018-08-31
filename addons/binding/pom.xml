@@ -113,6 +113,7 @@
     <module>org.openhab.binding.silvercrestwifisocket</module>
     <module>org.openhab.binding.sleepiq</module>
     <module>org.openhab.binding.smaenergymeter</module>
+    <module>org.openhab.binding.smhiweather</module>
     <module>org.openhab.binding.solaredge</module>
     <module>org.openhab.binding.solarlog</module>
     <module>org.openhab.binding.squeezebox</module>
@@ -129,6 +130,7 @@
     <module>org.openhab.binding.urtsi</module>
     <module>org.openhab.binding.valloxmv</module>
     <module>org.openhab.binding.velbus</module>
+    <module>org.openhab.binding.verisure</module>
     <module>org.openhab.binding.vitotronic</module>
     <module>org.openhab.binding.wifiled</module>
     <module>org.openhab.binding.wifiled.test</module>

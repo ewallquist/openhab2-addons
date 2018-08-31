@@ -493,6 +493,11 @@
         <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.smaenergymeter/${project.version}</bundle>
     </feature>
 
+    <feature name="openhab-binding-smhiweather" description="SMHI Weather Binding" version="${project.version}">
+        <feature>openhab-runtime-base</feature>
+        <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.smhiweather/${project.version}</bundle>
+    </feature>
+
     <feature name="openhab-binding-solaredge" description="SolarEdge Binding" version="${project.version}">
         <feature>openhab-runtime-base</feature>
         <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.solaredge/${project.version}</bundle>
@@ -563,6 +568,11 @@
         <feature>openhab-runtime-base</feature>
         <feature>openhab-transport-serial</feature>
         <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.velbus/${project.version}</bundle>
+    </feature>
+
+    <feature name="openhab-binding-verisure" description="Verisure Binding" version="${project.version}">
+        <feature>openhab-runtime-base</feature>
+        <bundle start-level="80">mvn:org.openhab.binding/org.openhab.binding.verisure/${project.version}</bundle>
     </feature>
 
     <feature name="openhab-binding-vitotronic" description="Vitotronic Binding" version="${project.version}">
