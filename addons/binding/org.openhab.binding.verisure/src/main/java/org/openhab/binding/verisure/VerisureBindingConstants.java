@@ -30,6 +30,8 @@ public class VerisureBindingConstants {
     public final static ThingTypeUID THING_TYPE_DOORWINDOW = new ThingTypeUID(BINDING_ID, "doorWindowSensor");
     public final static ThingTypeUID THING_TYPE_USERPRESENCE = new ThingTypeUID(BINDING_ID, "userPresence");
     public final static ThingTypeUID THING_TYPE_SMARTLOCK = new ThingTypeUID(BINDING_ID, "smartLock");
+    public final static ThingTypeUID THING_TYPE_BROADBAND_CONNECTION = new ThingTypeUID(BINDING_ID,
+            "broadbandConnection");
 
     // List of all Channel ids
     public final static String CHANNEL_NUMERIC_STATUS = "numericStatus";
@@ -46,10 +48,12 @@ public class VerisureBindingConstants {
     public final static String CHANNEL_SET_ALARM_STATUS = "setAlarmStatus";
     public final static String CHANNEL_SET_SMARTLOCK_STATUS = "setSmartLockStatus";
     public final static String CHANNEL_SET_SMARTPLUG_STATUS = "setSmartPlugStatus";
+    public final static String CHANNEL_SMARTPLUG_STATUS = "smartPlugStatus";
     public static final String CHANNEL_ALARM_SMARTLOCK_STATUS = "alarmSmartLockStatus";
-
-    public final static String CHANNEL_CHANGEDBYUSER = "changedByUser";
+    public final static String CHANNEL_CHANGED_BY_USER = "changedByUser";
     public final static String CHANNEL_TIMESTAMP = "timestamp";
+    public final static String CHANNEL_HAS_WIFI = "hasWifi";
+    public final static String CHANNEL_HAZARDOUS = "hazardous";
 
     // REST URI constants
     public static final String USERNAME = "username";
@@ -66,5 +70,5 @@ public class VerisureBindingConstants {
     public static final String USERTRACKING_PATH = "/overview/usertrackingcontacts?_=";
     public static final String CLIMATEDEVICE_PATH = "/overview/climatedevice?_=";
     public static final String SMARTPLUG_PATH = "/settings/smartplug?_=";
-
+    public static final String ETHERNETSTATUS_PATH = "/overview/ethernetstatus?_=";
 }

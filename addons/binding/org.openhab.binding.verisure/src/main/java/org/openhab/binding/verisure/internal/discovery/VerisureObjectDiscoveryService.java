@@ -22,11 +22,12 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.verisure.handler.VerisureBridgeHandler;
 import org.openhab.binding.verisure.handler.VerisureObjectHandler;
 import org.openhab.binding.verisure.internal.VerisureAlarmJSON;
+import org.openhab.binding.verisure.internal.VerisureBroadbandConnectionJSON;
 import org.openhab.binding.verisure.internal.VerisureClimateBaseJSON;
 import org.openhab.binding.verisure.internal.VerisureDoorWindowsJSON;
 import org.openhab.binding.verisure.internal.VerisureObjectJSON;
 import org.openhab.binding.verisure.internal.VerisureSmartPlugJSON;
-import org.openhab.binding.verisure.internal.VerisureUserTrackingJSON;
+import org.openhab.binding.verisure.internal.VerisureUserPresenceJSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -94,7 +95,7 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
         ThingUID tuid = null;
         if (voj instanceof VerisureAlarmJSON) {
             tuid = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-        } else if (voj instanceof VerisureUserTrackingJSON) {
+        } else if (voj instanceof VerisureUserPresenceJSON) {
             tuid = new ThingUID(THING_TYPE_USERPRESENCE, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
         } else if (voj instanceof VerisureDoorWindowsJSON) {
             tuid = new ThingUID(THING_TYPE_DOORWINDOW, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
@@ -110,6 +111,9 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
             } else {
                 logger.error("Unknown climate device:" + ((VerisureClimateBaseJSON) voj).getType());
             }
+        } else if (voj instanceof VerisureBroadbandConnectionJSON) {
+            tuid = new ThingUID(THING_TYPE_BROADBAND_CONNECTION, bridgeUID,
+                    voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
         } else {
             logger.error("Unsupported JSON!");
         }

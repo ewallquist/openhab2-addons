@@ -20,8 +20,10 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
 
     @SerializedName("area")
     private String area;
+
     @SerializedName("state")
     private String state;
+
     @SerializedName("deviceLabel")
     private String deviceLabel;
 

@@ -16,17 +16,20 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureUserTrackingJSON implements VerisureObjectJSON {
+public class VerisureUserPresenceJSON implements VerisureObjectJSON {
     @SerializedName("name")
     private String name;
+
     @SerializedName("webAccount")
     private String webAccount;
+
     @SerializedName("userTrackingLocationStatus")
     private String userTrackingLocationStatus;
+
     @SerializedName("currentLocationName")
     private String currentLocationName;
 
-    public VerisureUserTrackingJSON(String id, String webAccount, String userLocationStatus, String userLocationName) {
+    public VerisureUserPresenceJSON(String id, String webAccount, String userLocationStatus, String userLocationName) {
         super();
         this.name = id;
         this.webAccount = webAccount;
@@ -80,6 +83,7 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
         int result = 1;
         result = prime * result + ((userTrackingLocationStatus == null) ? 0 : userTrackingLocationStatus.hashCode());
         result = prime * result + ((webAccount == null) ? 0 : webAccount.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -96,10 +100,10 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof VerisureUserTrackingJSON)) {
+        if (!(obj instanceof VerisureUserPresenceJSON)) {
             return false;
         }
-        VerisureUserTrackingJSON other = (VerisureUserTrackingJSON) obj;
+        VerisureUserPresenceJSON other = (VerisureUserPresenceJSON) obj;
         if (userTrackingLocationStatus == null) {
             if (other.userTrackingLocationStatus != null) {
                 return false;
@@ -112,6 +116,13 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
                 return false;
             }
         } else if (!webAccount.equals(other.webAccount)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;

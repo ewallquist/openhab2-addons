@@ -166,6 +166,25 @@
         </properties>
     </thing-type>
     
+    <thing-type id="broadbandConnection">
+        <supported-bridge-type-refs>
+            <bridge-type-ref id="bridge" />
+        </supported-bridge-type-refs>
+
+        <label>Verisure Broadband Connection</label>
+        <description>Status of the Verisure broadband connection.</description>
+
+       <channels>
+            <channel id="timestamp" typeId="timestamp"/>
+            <channel id="hasWifi" typeId="hasWifi"/>
+            <channel id="status" typeId="status"/>
+        </channels>
+
+        <properties>
+            <property name="vendor">Verisure</property>
+        </properties>
+    </thing-type>
+    
     <thing-type id="smartPlug">
         <supported-bridge-type-refs>
             <bridge-type-ref id="bridge" />
@@ -175,9 +194,10 @@
         <description>A Verisure SmartPlug in your system.</description>
 
         <channels>
-            <channel id="state" typeId="state"/>
+            <channel id="smartPlugStatus" typeId="smartPlugStatus"/>
             <channel id="setSmartPlugStatus" typeId="setSmartplugStatus"/>
             <channel id="location" typeId="location" />
+            <channel id="hazardous" typeId="hazardous" />
         </channels>
 
         <properties>
@@ -320,6 +340,30 @@
         <item-type>String</item-type>
         <label>Location</label>
         <description>The location of the device.</description>
+        <state readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="hasWifi">
+        <item-type>Boolean</item-type>
+        <label>Wifi Connection</label>
+        <description>Is Verisure connected via Wifi.</description>
+        <state readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="hazardous">
+        <item-type>Boolean</item-type>
+        <label>Hazardous</label>
+        <description>Is Verisure SmartPlug configured as hazardous.</description>
+        <state readOnly="true">
+        </state>
+    </channel-type>
+    
+    <channel-type id="smartPlugStatus">
+        <item-type>String</item-type>
+        <label>SmartPlug Status</label>
+        <description>Is Verisure SmartPlug On or Off.</description>
         <state readOnly="true">
         </state>
     </channel-type>

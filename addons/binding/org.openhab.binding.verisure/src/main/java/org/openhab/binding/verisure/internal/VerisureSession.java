@@ -73,10 +73,30 @@ public class VerisureSession {
             updateAlarmStatus();
             updateVerisureObjects(CLIMATEDEVICE_PATH, VerisureClimateBaseJSON[].class);
             updateVerisureObjects(DOORWINDOW_PATH, VerisureDoorWindowsJSON[].class);
-            updateVerisureObjects(USERTRACKING_PATH, VerisureUserTrackingJSON[].class);
+            updateVerisureObjects(USERTRACKING_PATH, VerisureUserPresenceJSON[].class);
             updateVerisureObjects(SMARTPLUG_PATH, VerisureSmartPlugJSON[].class);
+            updateVerisureBroadbandStatus(ETHERNETSTATUS_PATH, VerisureBroadbandConnectionJSON.class);
         } catch (RuntimeException e) {
             logger.error("Failed in updatestatus", e);
+        }
+    }
+
+    public synchronized void updateVerisureBroadbandStatus(String urlString,
+            Class<? extends VerisureObjectJSON> jsonClass) {
+
+        try {
+            VerisureObjectJSON object = callJSONRest(urlString, jsonClass);
+            logger.debug("REST Response ({})", object);
+            if (object != null) {
+                object.setId(object.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+                VerisureObjectJSON oldObj = verisureObjects.get(object.getId());
+                if (oldObj == null || !oldObj.equals(object)) {
+                    verisureObjects.put(object.getId(), object);
+                    notifyListeners(object);
+                }
+            }
+        } catch (Exception e) {
+            logger.info("Failed to get all {}", urlString, e);
         }
     }
 

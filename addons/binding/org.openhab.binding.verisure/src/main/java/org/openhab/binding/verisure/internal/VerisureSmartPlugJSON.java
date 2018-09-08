@@ -28,12 +28,12 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
     private String statusText;
 
     @SerializedName("hazardous")
-    private String hazardous;
+    private Boolean hazardous;
 
     @SerializedName("deviceLabel")
     private String deviceLabel;
 
-    public VerisureSmartPlugJSON(String id, String location, String status, String statusText, String hazardous) {
+    public VerisureSmartPlugJSON(String id, String location, String status, String statusText, Boolean hazardous) {
         super();
         this.location = location;
         this.status = status;
@@ -125,12 +125,12 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
         this.deviceLabel = id;
     }
 
-    public String getHazardous() {
+    public Boolean getHazardous() {
         return hazardous;
     }
 
-    public void setHazardous(String hazardous) {
-        this.status = hazardous;
+    public void setHazardous(Boolean hazardous) {
+        this.hazardous = hazardous;
     }
 
     public String getStatusText() {

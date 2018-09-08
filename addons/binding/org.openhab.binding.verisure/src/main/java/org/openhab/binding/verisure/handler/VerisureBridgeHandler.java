@@ -211,7 +211,7 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
             cuid = new ChannelUID(getThing().getUID(), CHANNEL_NUMERIC_STATUS);
             updateState(cuid, session.getAlarmStatusNumeric());
 
-            cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGEDBYUSER);
+            cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGED_BY_USER);
             updateState(cuid, session.getAlarmChangerName());
 
             cuid = new ChannelUID(getThing().getUID(), CHANNEL_TIMESTAMP);
