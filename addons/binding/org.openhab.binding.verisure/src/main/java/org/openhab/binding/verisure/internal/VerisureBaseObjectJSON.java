@@ -21,23 +21,8 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
     @SerializedName("id")
     protected String id;
 
-    @SerializedName("date")
-    protected String date;
-
-    @SerializedName("notAllowedReason")
-    protected String notAllowedReason;
-
     @SerializedName("name")
     protected String name;
-
-    @SerializedName("changeAllowed")
-    protected Boolean changeAllowed;
-
-    @SerializedName("label")
-    protected String label;
-
-    @SerializedName("type")
-    protected String type;
 
     @SerializedName("location")
     protected String location;
@@ -61,38 +46,10 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
     /**
      *
      * @param status
-     *            The status
+     *                   The status
      */
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    /**
-     * @return the date
-     */
-    public String getDate() {
-        return date;
-    }
-
-    /**
-     * @param date the date to set
-     */
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    /**
-     * @return the notAllowedReason
-     */
-    public String getNotAllowedReason() {
-        return notAllowedReason;
-    }
-
-    /**
-     * @param notAllowedReason the notAllowedReason to set
-     */
-    public void setNotAllowedReason(String notAllowedReason) {
-        this.notAllowedReason = notAllowedReason;
     }
 
     /**
@@ -107,20 +64,6 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
      */
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     * @return the changeAllowed
-     */
-    public Boolean getChangeAllowed() {
-        return changeAllowed;
-    }
-
-    /**
-     * @param changeAllowed the changeAllowed to set
-     */
-    public void setChangeAllowed(Boolean changeAllowed) {
-        this.changeAllowed = changeAllowed;
     }
 
     /**
@@ -140,36 +83,9 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
     }
 
     /**
-     * @return the label
-     */
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     * @param label the label to set
-     */
-    public void setLabel(String label) {
-        this.label = label;
-    }
-
-    /**
-     * @return the type
-     */
-    public String getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    /**
      * @return the location
      */
+    @Override
     public String getLocation() {
         return location;
     }
@@ -190,11 +106,6 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("VerisureBaseObjectJSON [");
-        if (date != null) {
-            builder.append("date=");
-            builder.append(date);
-            builder.append(", ");
-        }
         if (name != null) {
             builder.append("name=");
             builder.append(name);
@@ -203,16 +114,6 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
         if (id != null) {
             builder.append("id=");
             builder.append(id);
-            builder.append(", ");
-        }
-        if (label != null) {
-            builder.append("label=");
-            builder.append(label);
-            builder.append(", ");
-        }
-        if (type != null) {
-            builder.append("type=");
-            builder.append(type);
             builder.append(", ");
         }
         if (location != null) {
@@ -226,10 +127,5 @@ public class VerisureBaseObjectJSON implements VerisureObjectJSON {
         }
         builder.append("]");
         return builder.toString();
-    }
-
-    @Override
-    public String getDescription() {
-        return location;
     }
 }

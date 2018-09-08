@@ -18,19 +18,27 @@ import com.google.gson.annotations.SerializedName;
  */
 public class VerisureSmartPlugJSON implements VerisureObjectJSON {
 
-    @SerializedName("area")
-    private String area;
-    @SerializedName("state")
-    private String state;
+    @SerializedName("location")
+    private String location;
+
+    @SerializedName("status")
+    private String status;
+
+    @SerializedName("statusText")
+    private String statusText;
+
+    @SerializedName("hazardous")
+    private String hazardous;
+
     @SerializedName("deviceLabel")
     private String deviceLabel;
-    @SerializedName("currentState")
-    private String currentState;
 
-    public VerisureSmartPlugJSON(String id, String state, String area) {
+    public VerisureSmartPlugJSON(String id, String location, String status, String statusText, String hazardous) {
         super();
-        this.area = area;
-        this.state = state;
+        this.location = location;
+        this.status = status;
+        this.statusText = statusText;
+        this.hazardous = hazardous;
         this.deviceLabel = id;
     }
 
@@ -43,9 +51,11 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((area == null) ? 0 : area.hashCode());
+        result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((deviceLabel == null) ? 0 : deviceLabel.hashCode());
-        result = prime * result + ((state == null) ? 0 : state.hashCode());
+        result = prime * result + ((status == null) ? 0 : status.hashCode());
+        result = prime * result + ((statusText == null) ? 0 : statusText.hashCode());
+        result = prime * result + ((hazardous == null) ? 0 : hazardous.hashCode());
         return result;
     }
 
@@ -66,11 +76,11 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
             return false;
         }
         VerisureSmartPlugJSON other = (VerisureSmartPlugJSON) obj;
-        if (area == null) {
-            if (other.area != null) {
+        if (location == null) {
+            if (other.location != null) {
                 return false;
             }
-        } else if (!area.equals(other.area)) {
+        } else if (!location.equals(other.location)) {
             return false;
         }
         if (deviceLabel == null) {
@@ -80,13 +90,28 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
         } else if (!deviceLabel.equals(other.deviceLabel)) {
             return false;
         }
-        if (state == null) {
-            if (other.state != null) {
+        if (status == null) {
+            if (other.status != null) {
                 return false;
             }
-        } else if (!state.equals(other.state)) {
+        } else if (!status.equals(other.status)) {
             return false;
         }
+        if (statusText == null) {
+            if (other.statusText != null) {
+                return false;
+            }
+        } else if (!statusText.equals(other.statusText)) {
+            return false;
+        }
+        if (hazardous == null) {
+            if (other.hazardous != null) {
+                return false;
+            }
+        } else if (!hazardous.equals(other.hazardous)) {
+            return false;
+        }
+
         return true;
     }
 
@@ -100,47 +125,37 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
         this.deviceLabel = id;
     }
 
-    public String getState() {
-        return state;
+    public String getHazardous() {
+        return hazardous;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setHazardous(String hazardous) {
+        this.status = hazardous;
     }
 
-    public String getArea() {
-        return area;
+    public String getStatusText() {
+        return statusText;
     }
 
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    @Override
-    public String getDescription() {
-        return area;
+    public void setStatusText(String statusText) {
+        this.status = statusText;
     }
 
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("VerisureSmartPlugJSON [");
-        if (area != null) {
-            builder.append("area=");
-            builder.append(area);
-            builder.append(", ");
-        }
-        if (state != null) {
-            builder.append("state=");
-            builder.append(state);
-            builder.append(", ");
-        }
-        if (deviceLabel != null) {
-            builder.append("deviceLabel=");
-            builder.append(deviceLabel);
-        }
-        builder.append("]");
-        return builder.toString();
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public String getDeviceLabel() {
@@ -151,12 +166,36 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
         this.deviceLabel = deviceLabel;
     }
 
-    public String getCurrentState() {
-        return currentState;
-    }
-
-    public void setCurrentState(String currentState) {
-        this.currentState = currentState;
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("VerisureSmartPlugJSON [");
+        if (location != null) {
+            builder.append("location=");
+            builder.append(location);
+            builder.append(", ");
+        }
+        if (status != null) {
+            builder.append("status=");
+            builder.append(status);
+            builder.append(", ");
+        }
+        if (statusText != null) {
+            builder.append("statusText=");
+            builder.append(statusText);
+            builder.append(", ");
+        }
+        if (hazardous != null) {
+            builder.append("hazardous=");
+            builder.append(hazardous);
+            builder.append(", ");
+        }
+        if (deviceLabel != null) {
+            builder.append("deviceLabel=");
+            builder.append(deviceLabel);
+        }
+        builder.append("]");
+        return builder.toString();
     }
 
 }

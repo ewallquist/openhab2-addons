@@ -17,75 +17,37 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureSensorJSON extends VerisureBaseObjectJSON {
+public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
 
     @SerializedName("temperatureBelowMinAlertValue")
+    protected String temperatureBelowMinAlertValue;
 
-    private String temperatureBelowMinAlertValue;
     @SerializedName("temperatureAboveMaxAlertValue")
+    protected String temperatureAboveMaxAlertValue;
 
-    private String temperatureAboveMaxAlertValue;
     @SerializedName("temperature")
+    protected String temperature;
 
-    private String temperature;
     @SerializedName("plottable")
+    protected Boolean plottable;
 
-    private Boolean plottable;
     @SerializedName("monitorable")
+    protected Boolean monitorable;
 
-    private Boolean monitorable;
     @SerializedName("humidity")
+    protected String humidity;
 
-    private String humidity;
     @SerializedName("humidityBelowMinAlertValue")
+    protected String humidityBelowMinAlertValue;
 
-    private String humidityBelowMinAlertValue;
     @SerializedName("humidityAboveMaxAlertValue")
+    protected String humidityAboveMaxAlertValue;
 
-    private String humidityAboveMaxAlertValue;
+    @SerializedName("type")
+    protected String type;
+
     @SerializedName("timestamp")
-
-    private String timestamp;
-
-    /**
-     *
-     * @return
-     *         The date
-     */
-    @Override
-    public String getDate() {
-        return date;
-    }
-
-    /**
-     *
-     * @param date
-     *            The date
-     */
-    @Override
-    public void setDate(String date) {
-        this.date = date;
-    }
-
-    /**
-     *
-     * @return
-     *         The notAllowedReason
-     */
-    @Override
-    public String getNotAllowedReason() {
-        return notAllowedReason;
-    }
-
-    /**
-     *
-     * @param notAllowedReason
-     *            The notAllowedReason
-     */
-    @Override
-    public void setNotAllowedReason(String notAllowedReason) {
-        this.notAllowedReason = notAllowedReason;
-    }
+    protected String timestamp;
 
     /**
      *
@@ -100,51 +62,11 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param name
-     *            The name
+     *                 The name
      */
     @Override
     public void setName(String name) {
         this.name = name;
-    }
-
-    /**
-     *
-     * @return
-     *         The changeAllowed
-     */
-    @Override
-    public Boolean getChangeAllowed() {
-        return changeAllowed;
-    }
-
-    /**
-     *
-     * @param changeAllowed
-     *            The changeAllowed
-     */
-    @Override
-    public void setChangeAllowed(Boolean changeAllowed) {
-        this.changeAllowed = changeAllowed;
-    }
-
-    /**
-     *
-     * @return
-     *         The label
-     */
-    @Override
-    public String getLabel() {
-        return label;
-    }
-
-    /**
-     *
-     * @param label
-     *            The label
-     */
-    @Override
-    public void setLabel(String label) {
-        this.label = label;
     }
 
     /**
@@ -159,7 +81,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param temperatureBelowMinAlertValue
-     *            The temperatureBelowMinAlertValue
+     *                                          The temperatureBelowMinAlertValue
      */
     public void setTemperatureBelowMinAlertValue(String temperatureBelowMinAlertValue) {
         this.temperatureBelowMinAlertValue = temperatureBelowMinAlertValue;
@@ -177,7 +99,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param temperatureAboveMaxAlertValue
-     *            The temperatureAboveMaxAlertValue
+     *                                          The temperatureAboveMaxAlertValue
      */
     public void setTemperatureAboveMaxAlertValue(String temperatureAboveMaxAlertValue) {
         this.temperatureAboveMaxAlertValue = temperatureAboveMaxAlertValue;
@@ -195,7 +117,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param temperature
-     *            The temperature
+     *                        The temperature
      */
     public void setTemperature(String temperature) {
         this.temperature = temperature;
@@ -213,7 +135,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param plottable
-     *            The plottable
+     *                      The plottable
      */
     public void setPlottable(Boolean plottable) {
         this.plottable = plottable;
@@ -231,7 +153,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param monitorable
-     *            The monitorable
+     *                        The monitorable
      */
     public void setMonitorable(Boolean monitorable) {
         this.monitorable = monitorable;
@@ -249,7 +171,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param humidity
-     *            The humidity
+     *                     The humidity
      */
     public void setHumidity(String humidity) {
         this.humidity = humidity;
@@ -268,7 +190,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param location
-     *            The location
+     *                     The location
      */
     @Override
     public void setLocation(String location) {
@@ -287,7 +209,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param humidityBelowMinAlertValue
-     *            The humidityBelowMinAlertValue
+     *                                       The humidityBelowMinAlertValue
      */
     public void setHumidityBelowMinAlertValue(String humidityBelowMinAlertValue) {
         this.humidityBelowMinAlertValue = humidityBelowMinAlertValue;
@@ -306,31 +228,11 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param id
-     *            The id
+     *               The id
      */
     @Override
     public void setId(String id) {
         this.id = id;
-    }
-
-    /**
-     *
-     * @return
-     *         The type
-     */
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    /**
-     *
-     * @param type
-     *            The type
-     */
-    @Override
-    public void setType(String type) {
-        this.type = type;
     }
 
     /**
@@ -345,7 +247,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param humidityAboveMaxAlertValue
-     *            The humidityAboveMaxAlertValue
+     *                                       The humidityAboveMaxAlertValue
      */
     public void setHumidityAboveMaxAlertValue(String humidityAboveMaxAlertValue) {
         this.humidityAboveMaxAlertValue = humidityAboveMaxAlertValue;
@@ -363,10 +265,28 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @param timestamp
-     *            The timestamp
+     *                      The timestamp
      */
     public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
+    }
+
+    /**
+     *
+     * @return
+     *         The type of climate sensor
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     *
+     * @param type
+     *                 The type of cliemate sensor
+     */
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getModelID() {
@@ -383,17 +303,13 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((changeAllowed == null) ? 0 : changeAllowed.hashCode());
-        result = prime * result + ((date == null) ? 0 : date.hashCode());
         result = prime * result + ((humidity == null) ? 0 : humidity.hashCode());
         result = prime * result + ((humidityAboveMaxAlertValue == null) ? 0 : humidityAboveMaxAlertValue.hashCode());
         result = prime * result + ((humidityBelowMinAlertValue == null) ? 0 : humidityBelowMinAlertValue.hashCode());
         result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((label == null) ? 0 : label.hashCode());
         result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((monitorable == null) ? 0 : monitorable.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((notAllowedReason == null) ? 0 : notAllowedReason.hashCode());
         result = prime * result + ((plottable == null) ? 0 : plottable.hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((temperature == null) ? 0 : temperature.hashCode());
@@ -422,21 +338,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        VerisureSensorJSON other = (VerisureSensorJSON) obj;
-        if (changeAllowed == null) {
-            if (other.changeAllowed != null) {
-                return false;
-            }
-        } else if (!changeAllowed.equals(other.changeAllowed)) {
-            return false;
-        }
-        if (date == null) {
-            if (other.date != null) {
-                return false;
-            }
-        } else if (!date.equals(other.date)) {
-            return false;
-        }
+        VerisureClimateBaseJSON other = (VerisureClimateBaseJSON) obj;
         if (humidity == null) {
             if (other.humidity != null) {
                 return false;
@@ -465,13 +367,6 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
         } else if (!id.equals(other.id)) {
             return false;
         }
-        if (label == null) {
-            if (other.label != null) {
-                return false;
-            }
-        } else if (!label.equals(other.label)) {
-            return false;
-        }
         if (location == null) {
             if (other.location != null) {
                 return false;
@@ -491,13 +386,6 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
                 return false;
             }
         } else if (!name.equals(other.name)) {
-            return false;
-        }
-        if (notAllowedReason == null) {
-            if (other.notAllowedReason != null) {
-                return false;
-            }
-        } else if (!notAllowedReason.equals(other.notAllowedReason)) {
             return false;
         }
         if (plottable == null) {
@@ -560,7 +448,7 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("VerisureSensorJSON [");
+        builder.append("VerisureClimateBaseJSON [");
         if (temperature != null) {
             builder.append("temperature=");
             builder.append(temperature);
@@ -576,9 +464,9 @@ public class VerisureSensorJSON extends VerisureBaseObjectJSON {
             builder.append(timestamp);
             builder.append(", ");
         }
-        if (date != null) {
-            builder.append("date=");
-            builder.append(date);
+        if (type != null) {
+            builder.append("type=");
+            builder.append(type);
             builder.append(", ");
         }
         if (id != null) {

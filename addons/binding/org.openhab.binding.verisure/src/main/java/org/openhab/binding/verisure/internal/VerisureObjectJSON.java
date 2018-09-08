@@ -19,5 +19,6 @@ public interface VerisureObjectJSON {
 
     public void setId(String id);
 
-    public String getDescription();
+    public String getLocation();
+
 }

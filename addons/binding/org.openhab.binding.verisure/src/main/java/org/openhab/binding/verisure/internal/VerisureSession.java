@@ -10,6 +10,7 @@ package org.openhab.binding.verisure.internal;
 
 import static org.openhab.binding.verisure.VerisureBindingConstants.*;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -31,7 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 /**
- * This class performs the communication with the Verisure My Pages.
+ * This class performs the communication with Verisure My Pages.
  *
  * @author Jarle Hjortland
  *
@@ -42,20 +43,22 @@ public class VerisureSession {
     private Logger logger = LoggerFactory.getLogger(VerisureSession.class);
     private String authstring;
     private String csrf;
-    private String pinCode;
+    private BigDecimal pinCode;
+    private BigDecimal installationInstance;
     private VerisureAlarmJSON alarmData = null;
     private Gson gson = new GsonBuilder().create();
 
-    private VerisureAlarmJSON doorData;
+    private VerisureAlarmJSON smartLockData;
 
     private List<DeviceStatusListener> deviceStatusListeners = new CopyOnWriteArrayList<>();
     private HttpClient httpClient;
 
-    public void initialize(String _authstring, String pinCode) throws Exception {
+    public void initialize(String _authstring, BigDecimal pinCode, BigDecimal installationInstance) throws Exception {
         logger.debug("VerisureSession:initialize");
 
         this.authstring = _authstring.substring(0);
         this.pinCode = pinCode;
+        this.installationInstance = installationInstance;
         // Instantiate and configure the SslContextFactory
         SslContextFactory sslContextFactory = new SslContextFactory();
         this.httpClient = new HttpClient(sslContextFactory);
@@ -68,10 +71,10 @@ public class VerisureSession {
         logger.debug("VerisureSession:updateStatus");
         try {
             updateAlarmStatus();
-            updateVerisureObjects(CLIMATEDATA_PATH, VerisureSensorJSON[].class);
+            updateVerisureObjects(CLIMATEDEVICE_PATH, VerisureClimateBaseJSON[].class);
             updateVerisureObjects(DOORWINDOW_PATH, VerisureDoorWindowsJSON[].class);
             updateVerisureObjects(USERTRACKING_PATH, VerisureUserTrackingJSON[].class);
-            updateVerisureObjects(SMARTPLUGDATA_PATH, VerisureSmartPlugJSON[].class);
+            updateVerisureObjects(SMARTPLUG_PATH, VerisureSmartPlugJSON[].class);
         } catch (RuntimeException e) {
             logger.error("Failed in updatestatus", e);
         }
@@ -180,7 +183,7 @@ public class VerisureSession {
                     if (object.getType().equals("ARM_STATE")) {
                         setAlarmData(object);
                     } else if (object.getType().equals("DOOR_LOCK")) {
-                        setDoorData(object);
+                        setSmartLockData(object);
                     }
                 }
             }
@@ -192,8 +195,10 @@ public class VerisureSession {
 
     private <T> T callJSONRest(String url, Class<T> jsonClass) throws Exception {
         T result = null;
+        logger.debug("HTTP GET: " + BASEURL + url);
         ContentResponse httpResult = httpClient.GET(BASEURL + url + System.currentTimeMillis());
-        logger.debug("HTTP Response ({}) Body:{}", httpResult.getStatus(), httpResult.getContentAsString());
+        logger.debug("HTTP Response ({}) Body:{}", httpResult.getStatus(),
+                httpResult.getContentAsString().replaceAll("\n+", "\n"));
         if (httpResult.getStatus() == HttpStatus.OK_200) {
             result = gson.fromJson(httpResult.getContentAsString(), jsonClass);
         }
@@ -207,11 +212,11 @@ public class VerisureSession {
         }
     }
 
-    private void setDoorData(VerisureAlarmJSON object) {
-        if (!object.equals(doorData)) {
-            this.doorData = object;
-            this.verisureObjects.put(doorData.getId(), this.doorData);
-            notifyListeners(doorData);
+    private void setSmartLockData(VerisureAlarmJSON object) {
+        if (!object.equals(smartLockData)) {
+            this.smartLockData = object;
+            this.verisureObjects.put(smartLockData.getId(), this.smartLockData);
+            notifyListeners(smartLockData);
         }
     }
 
@@ -220,14 +225,14 @@ public class VerisureSession {
 
         String url = BASEURL + LOGON_SUF;
         String source = sendHTTPpost(url, authstring);
+        logger.debug(source);
 
-        // logger.debug(source);
-
-        url = BASEURL + START_SUF;
+        url = BASEURL + START_SUF + "?inst=" + installationInstance.toString();
+        logger.debug("Start URL: " + url);
         ContentResponse resp = httpClient.GET(url);
         source = resp.getContentAsString();
         csrf = getCsrfToken2(source);
-
+        logger.trace(source);
         logger.trace("Got CSRF: {}", csrf);
         return;
     }
@@ -329,17 +334,7 @@ public class VerisureSession {
         logger.debug("Sending command to disarm the alarm!");
 
         String url = BASEURL + ALARM_COMMAND;
-        String data = "code=" + pinCode + "&state=DISARMED";
-
-        sendHTTPpost(url, data);
-        return true;
-    }
-
-    public boolean lockDoor(String door) {
-        logger.debug("Sending command to disarm the alarm!");
-
-        String url = BASEURL + LOCK_COMMAND;
-        String data = "code=" + pinCode + "&state=LOCKED&deviceLabel=" + door + "&_csrf=" + csrf;
+        String data = "code=" + pinCode + "&state=DISARMED" + "&_csrf=" + csrf;
 
         sendHTTPpost(url, data);
         return true;
@@ -349,7 +344,7 @@ public class VerisureSession {
         logger.debug("Sending command to arm_home the alarm!");
 
         String url = BASEURL + ALARM_COMMAND;
-        String data = "code=" + pinCode + "&state=ARMED_HOME";
+        String data = "code=" + pinCode + "&state=ARMED_HOME" + "&_csrf=" + csrf;
 
         sendHTTPpost(url, data);
         return true;
@@ -359,7 +354,47 @@ public class VerisureSession {
         logger.debug("Sending command to arm_away the alarm!");
 
         String url = BASEURL + ALARM_COMMAND;
-        String data = "code=" + pinCode + "&state=ARMED_AWAY";
+        String data = "code=" + pinCode + "&state=ARMED_AWAY" + "&_csrf=" + csrf;
+
+        sendHTTPpost(url, data);
+        return true;
+    }
+
+    public boolean lock(String lock) {
+        logger.debug("Sending command to lock!");
+
+        String url = BASEURL + SMARTLOCK_COMMAND;
+        String data = "code=" + pinCode + "&state=LOCKED&deviceLabel=" + lock + "&_csrf=" + csrf;
+
+        sendHTTPpost(url, data);
+        return true;
+    }
+
+    public boolean unLock(String lock) {
+        logger.debug("Sending command to unlock!");
+
+        String url = BASEURL + SMARTLOCK_COMMAND;
+        String data = "code=" + pinCode + "&state=UNLOCKED&deviceLabel=" + lock + "&_csrf=" + csrf;
+
+        sendHTTPpost(url, data);
+        return true;
+    }
+
+    public boolean smartPlugOn(String lock) {
+        logger.debug("Sending command to lock!");
+
+        String url = BASEURL + SMARTPLUG_COMMAND;
+        String data = "targetDeviceLabel=" + lock + "targetOn=on" + "&_csrf=" + csrf;
+
+        sendHTTPpost(url, data);
+        return true;
+    }
+
+    public boolean smartPlugOff(String lock) {
+        logger.debug("Sending command to unlock!");
+
+        String url = BASEURL + SMARTPLUG_COMMAND;
+        String data = "targetDeviceLabel=" + lock + "targetOn=off" + "&_csrf=" + csrf;
 
         sendHTTPpost(url, data);
         return true;
@@ -367,7 +402,11 @@ public class VerisureSession {
 
     public VerisureAlarmJSON getDoorStatus() {
         // TODO Auto-generated method stub
-        return doorData;
+        return smartLockData;
+    }
+
+    public VerisureAlarmJSON getAlarmObject() {
+        return alarmData;
     }
 
     /*
@@ -394,20 +433,6 @@ public class VerisureSession {
             // onUpdate();
         }
         return result;
-    }
-
-    public boolean unLockDoor(String door) {
-        logger.debug("Sending command to disarm the alarm!");
-
-        String url = BASEURL + LOCK_COMMAND;
-        String data = "code=" + pinCode + "&state=UNLOCKED&deviceLabel=" + door + "&_csrf=" + csrf;
-
-        sendHTTPpost(url, data);
-        return true;
-    }
-
-    public VerisureAlarmJSON getAlarmObject() {
-        return alarmData;
     }
 
 }

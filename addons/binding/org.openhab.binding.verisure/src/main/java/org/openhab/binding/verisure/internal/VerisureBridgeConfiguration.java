@@ -23,5 +23,6 @@ public class VerisureBridgeConfiguration {
     public String username;
     public String password;
     public BigDecimal refresh;
-    public String pin;
+    public BigDecimal pin;
+    public BigDecimal installationInstance;
 }

@@ -26,9 +26,9 @@ import org.eclipse.smarthome.core.types.RefreshType;
 import org.openhab.binding.verisure.VerisureBindingConstants;
 import org.openhab.binding.verisure.internal.DeviceStatusListener;
 import org.openhab.binding.verisure.internal.VerisureAlarmJSON;
+import org.openhab.binding.verisure.internal.VerisureClimateBaseJSON;
 import org.openhab.binding.verisure.internal.VerisureDoorWindowsJSON;
 import org.openhab.binding.verisure.internal.VerisureObjectJSON;
-import org.openhab.binding.verisure.internal.VerisureSensorJSON;
 import org.openhab.binding.verisure.internal.VerisureSession;
 import org.openhab.binding.verisure.internal.VerisureSmartPlugJSON;
 import org.openhab.binding.verisure.internal.VerisureUserTrackingJSON;
@@ -46,8 +46,8 @@ import com.google.common.collect.Sets;
 public class VerisureObjectHandler extends BaseThingHandler implements DeviceStatusListener {
 
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets.newHashSet(THING_TYPE_ALARM,
-            THING_TYPE_SMARTPLUG, THING_TYPE_CLIMATESENSOR, THING_TYPE_LOCK, THING_TYPE_USERPRESENCE,
-            THING_TYPE_DOORWINDOW);
+            THING_TYPE_SMARTPLUG, THING_TYPE_SMOKEDETECTOR, THING_TYPE_WATERDETETOR, THING_TYPE_SIREN,
+            THING_TYPE_SMARTLOCK, THING_TYPE_USERPRESENCE, THING_TYPE_DOORWINDOW);
 
     private Logger logger = LoggerFactory.getLogger(VerisureObjectHandler.class);
 
@@ -64,38 +64,32 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
         if (command instanceof RefreshType) {
-            Bridge brige = getBridge();
-            if (brige != null && brige.getHandler() != null) {
-                brige.getHandler().handleCommand(channelUID, command);
+            Bridge bridge = getBridge();
+            if (bridge != null && bridge.getHandler() != null) {
+                bridge.getHandler().handleCommand(channelUID, command);
             }
             update(session.getVerisureObject(this.id));
-        } else if (channelUID.getId().equals(CHANNEL_SETSTATUS)) {
-            handleChangeDoorState(command);
+        } else if (channelUID.getId().equals(CHANNEL_SET_SMARTLOCK_STATUS)) {
+            handleSmartLockState(command);
             session.refresh();
         } else {
             logger.warn("unknown command! {}", command);
         }
     }
 
-    private void handleChangeDoorState(Command command) {
+    private void handleSmartLockState(Command command) {
         if (command.toString().equals("0")) {
-            logger.debug("attempting to turn off alarm!");
-            session.unLockDoor(this.id);
+            logger.debug("Attempting to unlock!");
+            session.unLock(this.id);
             ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS);
             updateState(cuid, new StringType("pending"));
         } else if (command.toString().equals("1")) {
-            logger.debug("arming at home");
-            session.lockDoor(this.id);
-            ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS);
-            updateState(cuid, new StringType("pending"));
-
-        } else if (command.toString().equals("2")) {
-            logger.debug("arming away!");
-            session.lockDoor(this.id);
+            logger.debug("Attempting to lock");
+            session.lock(this.id);
             ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS);
             updateState(cuid, new StringType("pending"));
         } else {
-            logger.debug("unknown command!");
+            logger.debug("unknown command!", command);
         }
     }
 
@@ -122,12 +116,18 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
 
     public synchronized void update(VerisureObjectJSON object) {
         updateStatus(ThingStatus.ONLINE);
-        if (getThing().getThingTypeUID().equals(THING_TYPE_CLIMATESENSOR)) {
-            VerisureSensorJSON obj = (VerisureSensorJSON) object;
-            updateSensorState(obj);
-        } else if (getThing().getThingTypeUID().equals(THING_TYPE_LOCK)) {
+        if (getThing().getThingTypeUID().equals(THING_TYPE_SMOKEDETECTOR)) {
+            VerisureClimateBaseJSON obj = (VerisureClimateBaseJSON) object;
+            updateClimateDeviceState(obj);
+        } else if (getThing().getThingTypeUID().equals(THING_TYPE_WATERDETETOR)) {
+            VerisureClimateBaseJSON obj = (VerisureClimateBaseJSON) object;
+            updateClimateDeviceState(obj);
+        } else if (getThing().getThingTypeUID().equals(THING_TYPE_SIREN)) {
+            VerisureClimateBaseJSON obj = (VerisureClimateBaseJSON) object;
+            updateClimateDeviceState(obj);
+        } else if (getThing().getThingTypeUID().equals(THING_TYPE_SMARTLOCK)) {
             VerisureAlarmJSON obj = (VerisureAlarmJSON) object;
-            updateLockState(obj);
+            updateSmartLockState(obj);
         } else if (getThing().getThingTypeUID().equals(THING_TYPE_DOORWINDOW)) {
             VerisureDoorWindowsJSON obj = (VerisureDoorWindowsJSON) object;
             updateDoorWindowState(obj);
@@ -138,13 +138,13 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
             VerisureSmartPlugJSON obj = (VerisureSmartPlugJSON) object;
             updateSmartPlugState(obj);
         } else {
-            logger.warn("cant handle this thingtypeuid: {}", getThing().getThingTypeUID());
+            logger.warn("cant handle this thing typeuid: {}", getThing().getThingTypeUID());
 
         }
 
     }
 
-    private void updateSensorState(VerisureSensorJSON obj) {
+    private void updateClimateDeviceState(VerisureClimateBaseJSON obj) {
         ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_TEMPERATURE);
         ChannelUID huid = new ChannelUID(getThing().getUID(), CHANNEL_HUMIDITY);
         ChannelUID luid = new ChannelUID(getThing().getUID(), CHANNEL_LASTUPDATE);
@@ -164,11 +164,11 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
         updateState(loid, location);
     }
 
-    private void updateLockState(VerisureAlarmJSON status) {
+    private void updateSmartLockState(VerisureAlarmJSON status) {
         ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS);
         updateState(cuid, new StringType(status.getStatus()));
 
-        cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGERNAME);
+        cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGEDBYUSER);
         updateState(cuid, new StringType(status.getName()));
 
         cuid = new ChannelUID(getThing().getUID(), CHANNEL_TIMESTAMP);
@@ -177,7 +177,7 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
         cuid = new ChannelUID(getThing().getUID(), CHANNEL_LOCATION);
         updateState(cuid, new StringType(status.getLocation()));
 
-        cuid = new ChannelUID(getThing().getUID(), VerisureBindingConstants.CHANNEL_STATUS_LOCALIZED);
+        cuid = new ChannelUID(getThing().getUID(), VerisureBindingConstants.CHANNEL_ALARM_SMARTLOCK_STATUS);
         updateState(cuid, new StringType(status.getLabel()));
     }
 
@@ -185,7 +185,7 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
         ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATE);
         updateState(cuid, new StringType(status.getState()));
 
-        cuid = new ChannelUID(getThing().getUID(), CHANNEL_LABEL);
+        cuid = new ChannelUID(getThing().getUID(), CHANNEL_LOCATION);
         updateState(cuid, new StringType(status.getArea()));
 
     }
@@ -195,13 +195,13 @@ public class VerisureObjectHandler extends BaseThingHandler implements DeviceSta
     }
 
     private void updateUserPresenceState(VerisureUserTrackingJSON status) {
-        ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_LOCATIONNAME);
-        updateState(cuid, new StringType(status.getUserLocatonName()));
+        ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_USER_LOCATION_NAME);
+        updateState(cuid, new StringType(status.getLocation()));
 
         cuid = new ChannelUID(getThing().getUID(), CHANNEL_WEBACCOUNT);
         updateState(cuid, new StringType(status.getWebAccount()));
 
-        cuid = new ChannelUID(getThing().getUID(), CHANNEL_LOCATIONSTATUS);
+        cuid = new ChannelUID(getThing().getUID(), CHANNEL_USER_LOCATION_STATUS);
         updateState(cuid, new StringType(status.getUserLocationStatus()));
     }
 

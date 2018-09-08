@@ -22,8 +22,10 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.verisure.handler.VerisureBridgeHandler;
 import org.openhab.binding.verisure.handler.VerisureObjectHandler;
 import org.openhab.binding.verisure.internal.VerisureAlarmJSON;
+import org.openhab.binding.verisure.internal.VerisureClimateBaseJSON;
 import org.openhab.binding.verisure.internal.VerisureDoorWindowsJSON;
 import org.openhab.binding.verisure.internal.VerisureObjectJSON;
+import org.openhab.binding.verisure.internal.VerisureSmartPlugJSON;
 import org.openhab.binding.verisure.internal.VerisureUserTrackingJSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +34,7 @@ import com.google.common.collect.Sets;
 
 /**
  * The discovery service, notified by a listener on the VerisureSession.
- * 
+ *
  * @author jarle hjortland
  *
  */
@@ -62,6 +64,7 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
         HashMap<String, VerisureObjectJSON> verisureObjects = verisureBridgeHandler.getSession().getVerisureObjects();
 
         for (Map.Entry<String, VerisureObjectJSON> entry : verisureObjects.entrySet()) {
+            logger.info(entry.getValue().toString());
             onObjectAddedInternal(entry.getValue());
         }
     }
@@ -72,12 +75,12 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
         if (thingUID != null) {
             ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withBridge(bridgeUID)
-                    .withLabel(value.getDescription()).build();
+                    .withLabel(value.getId()).build();
 
             logger.debug("thinguid: {}, bridge {}, label {}", thingUID.toString(), bridgeUID, value.getId());
             thingDiscovered(discoveryResult);
         } else {
-            logger.debug("discovered unsupported light of type '{}' with id {}", value.getId(), value.getId());
+            logger.debug("discovered unsupported thing of type '{}' with id {}", value.getId(), value.getId());
         }
 
     }
@@ -90,13 +93,25 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
 
         ThingUID tuid = null;
         if (voj instanceof VerisureAlarmJSON) {
-            tuid = new ThingUID(THING_TYPE_LOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            tuid = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
         } else if (voj instanceof VerisureUserTrackingJSON) {
             tuid = new ThingUID(THING_TYPE_USERPRESENCE, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
         } else if (voj instanceof VerisureDoorWindowsJSON) {
             tuid = new ThingUID(THING_TYPE_DOORWINDOW, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+        } else if (voj instanceof VerisureSmartPlugJSON) {
+            tuid = new ThingUID(THING_TYPE_SMARTPLUG, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+        } else if (voj instanceof VerisureClimateBaseJSON) {
+            if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Smoke detector")) {
+                tuid = new ThingUID(THING_TYPE_SMOKEDETECTOR, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            } else if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Water detector")) {
+                tuid = new ThingUID(THING_TYPE_WATERDETETOR, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            } else if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Siren")) {
+                tuid = new ThingUID(THING_TYPE_SIREN, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            } else {
+                logger.error("Unknown climate device:" + ((VerisureClimateBaseJSON) voj).getType());
+            }
         } else {
-            tuid = new ThingUID(THING_TYPE_CLIMATESENSOR, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            logger.error("Unsupported JSON!");
         }
 
         return tuid;

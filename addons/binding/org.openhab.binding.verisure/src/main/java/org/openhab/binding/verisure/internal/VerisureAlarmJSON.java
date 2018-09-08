@@ -8,19 +8,105 @@
  */
 package org.openhab.binding.verisure.internal;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * The Alarm state of the Verisure System.
- * 
+ *
  * @author Jarle Hjortland
  *
  */
 public class VerisureAlarmJSON extends VerisureBaseObjectJSON {
 
+    @SerializedName("date")
+    private String date;
+
+    @SerializedName("notAllowedReason")
+    private String notAllowedReason;
+
+    @SerializedName("changeAllowed")
+    private Boolean changeAllowed;
+
+    @SerializedName("label")
+    private String label;
+
+    @SerializedName("type")
+    private String type;
+
+    /**
+     * @return the date
+     */
+    public String getDate() {
+        return date;
+    }
+
+    /**
+     * @param date the date to set
+     */
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    /**
+     * @return the notAllowedReason
+     */
+    public String getNotAllowedReason() {
+        return notAllowedReason;
+    }
+
+    /**
+     * @param notAllowedReason the notAllowedReason to set
+     */
+    public void setNotAllowedReason(String notAllowedReason) {
+        this.notAllowedReason = notAllowedReason;
+    }
+
+    /**
+     * @return the changeAllowed
+     */
+    public Boolean getChangeAllowed() {
+        return changeAllowed;
+    }
+
+    /**
+     * @param changeAllowed the changeAllowed to set
+     */
+    public void setChangeAllowed(Boolean changeAllowed) {
+        this.changeAllowed = changeAllowed;
+    }
+
     /*
      * (non-Javadoc)
      *
      * @see java.lang.Object#hashCode()
+     */ /**
+         * @return the label
+         */
+    public String getLabel() {
+        return label;
+    }
+
+    /**
+     * @param label the label to set
      */
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    /**
+     * @return the type
+     */
+    public String getType() {
+        return type;
+    }
+
+    /**
+     * @param type the type to set
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
+
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -53,7 +139,7 @@ public class VerisureAlarmJSON extends VerisureBaseObjectJSON {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        VerisureBaseObjectJSON other = (VerisureBaseObjectJSON) obj;
+        VerisureAlarmJSON other = (VerisureAlarmJSON) obj;
         if (changeAllowed == null) {
             if (other.changeAllowed != null) {
                 return false;

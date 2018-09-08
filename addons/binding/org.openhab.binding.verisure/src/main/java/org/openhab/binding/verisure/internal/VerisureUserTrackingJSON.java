@@ -26,12 +26,12 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
     @SerializedName("currentLocationName")
     private String currentLocationName;
 
-    public VerisureUserTrackingJSON(String id, String webAccount, String userLocationStatus, String userLocatonName) {
+    public VerisureUserTrackingJSON(String id, String webAccount, String userLocationStatus, String userLocationName) {
         super();
         this.name = id;
         this.webAccount = webAccount;
         this.userTrackingLocationStatus = userLocationStatus;
-        this.currentLocationName = userLocatonName;
+        this.currentLocationName = userLocationName;
     }
 
     @Override
@@ -60,11 +60,12 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
         this.userTrackingLocationStatus = userLocationStatus;
     }
 
-    public String getUserLocatonName() {
+    @Override
+    public String getLocation() {
         return currentLocationName;
     }
 
-    public void setUserLocatonName(String userLocatonName) {
+    public void setLocation(String userLocatonName) {
         this.currentLocationName = userLocatonName;
     }
 
@@ -114,10 +115,5 @@ public class VerisureUserTrackingJSON implements VerisureObjectJSON {
             return false;
         }
         return true;
-    }
-
-    @Override
-    public String getDescription() {
-        return webAccount;
     }
 }

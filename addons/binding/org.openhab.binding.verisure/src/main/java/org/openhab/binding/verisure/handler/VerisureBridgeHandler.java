@@ -61,7 +61,8 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
 
     private BigDecimal refresh = new BigDecimal(600);
     private String authstring;
-    private String pinCode;
+    private BigDecimal pinCode;
+    private BigDecimal installationInstance;
     ScheduledFuture<?> refreshJob;
     ScheduledFuture<?> immediateRefreshJob;
 
@@ -97,12 +98,12 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
         if (command instanceof RefreshType) {
             scheduleImmediateRefresh();
             updateAlarmState();
-        } else if (channelUID.getId().equals(CHANNEL_SETSTATUS)) {
+        } else if (channelUID.getId().equals(CHANNEL_SET_ALARM_STATUS)) {
             handleChangeAlarmState(command);
         } else {
             logger.warn("unknown command! {}", command);
         }
-        scheduleImmediateRefresh();
+        // scheduleImmediateRefresh();
     }
 
     private void handleChangeAlarmState(Command command) {
@@ -151,6 +152,7 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
 
         this.refresh = config.refresh;
         this.pinCode = config.pin;
+        this.installationInstance = config.installationInstance;
 
         if (config.username == null || config.password == null) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_ERROR,
@@ -158,7 +160,7 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
         } else {
             authstring = "j_username=" + config.username + "&j_password=" + config.password;
             try {
-                session.initialize(authstring, pinCode);
+                session.initialize(authstring, pinCode, installationInstance);
                 startAutomaticRefresh();
             } catch (Error e) {
                 logger.error("Failed", e);
@@ -206,16 +208,16 @@ public class VerisureBridgeHandler extends BaseBridgeHandler {
             ChannelUID cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS);
             updateState(cuid, session.getAlarmStatus());
 
-            cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS_NUMERIC);
+            cuid = new ChannelUID(getThing().getUID(), CHANNEL_NUMERIC_STATUS);
             updateState(cuid, session.getAlarmStatusNumeric());
 
-            cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGERNAME);
+            cuid = new ChannelUID(getThing().getUID(), CHANNEL_CHANGEDBYUSER);
             updateState(cuid, session.getAlarmChangerName());
 
             cuid = new ChannelUID(getThing().getUID(), CHANNEL_TIMESTAMP);
             updateState(cuid, session.getAlarmTimestamp());
 
-            cuid = new ChannelUID(getThing().getUID(), CHANNEL_STATUS_LOCALIZED);
+            cuid = new ChannelUID(getThing().getUID(), CHANNEL_ALARM_SMARTLOCK_STATUS);
             updateState(cuid, new StringType(session.getAlarmObject().getLabel()));
         } catch (Exception e) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.COMMUNICATION_ERROR);

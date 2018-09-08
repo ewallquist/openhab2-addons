@@ -17,6 +17,7 @@ import com.google.gson.annotations.SerializedName;
  *
  */
 public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
+
     @SerializedName("area")
     private String area;
     @SerializedName("state")
@@ -24,9 +25,9 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
     @SerializedName("deviceLabel")
     private String deviceLabel;
 
-    public VerisureDoorWindowsJSON(String id, String state, String area) {
+    public VerisureDoorWindowsJSON(String id, String state, String location) {
         super();
-        this.area = area;
+        this.area = location;
         this.state = state;
         this.deviceLabel = id;
     }
@@ -114,7 +115,7 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
     }
 
     @Override
-    public String getDescription() {
+    public String getLocation() {
         return area;
     }
 
