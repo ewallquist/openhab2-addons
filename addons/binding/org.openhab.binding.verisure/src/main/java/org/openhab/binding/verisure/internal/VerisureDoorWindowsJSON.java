@@ -16,7 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
+public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
 
     @SerializedName("area")
     private String area;
@@ -32,6 +32,45 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
         this.area = location;
         this.state = state;
         this.deviceLabel = id;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getDeviceLabel() {
+        return deviceLabel;
+    }
+
+    public void setDeviceLabel(String deviceLabel) {
+        this.area = deviceLabel;
+    }
+
+    @Override
+    public String getLocation() {
+        return area;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.deviceLabel = id;
+    }
+
+    @Override
+    public String getId() {
+        return deviceLabel;
     }
 
     /*
@@ -56,15 +95,11 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+
+        if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof VerisureDoorWindowsJSON)) {
-            return false;
-        }
+
         VerisureDoorWindowsJSON other = (VerisureDoorWindowsJSON) obj;
         if (area == null) {
             if (other.area != null) {
@@ -91,37 +126,6 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
     }
 
     @Override
-    public String getId() {
-        return deviceLabel;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.deviceLabel = id;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    @Override
-    public String getLocation() {
-        return area;
-    }
-
-    @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("VerisureDoorWindowsJSON [");
@@ -140,7 +144,7 @@ public class VerisureDoorWindowsJSON implements VerisureObjectJSON {
             builder.append(deviceLabel);
         }
         builder.append("]");
-        return builder.toString();
+        return super.toString() + "\n" + builder.toString();
     }
 
 }

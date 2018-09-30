@@ -16,9 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureUserPresenceJSON implements VerisureObjectJSON {
-    @SerializedName("name")
-    private String name;
+public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
 
     @SerializedName("webAccount")
     private String webAccount;
@@ -39,12 +37,7 @@ public class VerisureUserPresenceJSON implements VerisureObjectJSON {
 
     @Override
     public String getId() {
-        return name;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.name = id;
+        return "userpresence_" + id;
     }
 
     public String getWebAccount() {
@@ -68,6 +61,7 @@ public class VerisureUserPresenceJSON implements VerisureObjectJSON {
         return currentLocationName;
     }
 
+    @Override
     public void setLocation(String userLocatonName) {
         this.currentLocationName = userLocatonName;
     }
@@ -83,7 +77,7 @@ public class VerisureUserPresenceJSON implements VerisureObjectJSON {
         int result = 1;
         result = prime * result + ((userTrackingLocationStatus == null) ? 0 : userTrackingLocationStatus.hashCode());
         result = prime * result + ((webAccount == null) ? 0 : webAccount.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        result = prime * result + ((currentLocationName == null) ? 0 : currentLocationName.hashCode());
         return result;
     }
 
@@ -94,15 +88,11 @@ public class VerisureUserPresenceJSON implements VerisureObjectJSON {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+
+        if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof VerisureUserPresenceJSON)) {
-            return false;
-        }
+
         VerisureUserPresenceJSON other = (VerisureUserPresenceJSON) obj;
         if (userTrackingLocationStatus == null) {
             if (other.userTrackingLocationStatus != null) {
@@ -118,13 +108,36 @@ public class VerisureUserPresenceJSON implements VerisureObjectJSON {
         } else if (!webAccount.equals(other.webAccount)) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
+        if (currentLocationName == null) {
+            if (other.currentLocationName != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (!currentLocationName.equals(other.currentLocationName)) {
             return false;
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("VerisureUserPresenceJSON [");
+        if (userTrackingLocationStatus != null) {
+            builder.append("userTrackingLocationStatus=");
+            builder.append(userTrackingLocationStatus);
+            builder.append(", ");
+        }
+        if (webAccount != null) {
+            builder.append("webAccount=");
+            builder.append(webAccount);
+            builder.append(", ");
+        }
+        if (currentLocationName != null) {
+            builder.append("currentLocationName=");
+            builder.append(currentLocationName);
+        }
+        builder.append("]");
+        return super.toString() + "\n" + builder.toString();
+    }
+
 }

@@ -17,7 +17,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
+public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
 
     @SerializedName("temperatureBelowMinAlertValue")
     protected String temperatureBelowMinAlertValue;
@@ -48,26 +48,6 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
 
     @SerializedName("timestamp")
     protected String timestamp;
-
-    /**
-     *
-     * @return
-     *         The name
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     *
-     * @param name
-     *                 The name
-     */
-    @Override
-    public void setName(String name) {
-        this.name = name;
-    }
 
     /**
      *
@@ -180,26 +160,6 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
     /**
      *
      * @return
-     *         The location
-     */
-    @Override
-    public String getLocation() {
-        return location;
-    }
-
-    /**
-     *
-     * @param location
-     *                     The location
-     */
-    @Override
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    /**
-     *
-     * @return
      *         The humidityBelowMinAlertValue
      */
     public String getHumidityBelowMinAlertValue() {
@@ -213,26 +173,6 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
      */
     public void setHumidityBelowMinAlertValue(String humidityBelowMinAlertValue) {
         this.humidityBelowMinAlertValue = humidityBelowMinAlertValue;
-    }
-
-    /**
-     *
-     * @return
-     *         The id
-     */
-    @Override
-    public String getId() {
-        return id;
-    }
-
-    /**
-     *
-     * @param id
-     *               The id
-     */
-    @Override
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
@@ -289,11 +229,6 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
         this.type = type;
     }
 
-    public String getModelID() {
-        // TODO Auto-generated method stub
-        return "climatesensor";
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -306,12 +241,8 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
         result = prime * result + ((humidity == null) ? 0 : humidity.hashCode());
         result = prime * result + ((humidityAboveMaxAlertValue == null) ? 0 : humidityAboveMaxAlertValue.hashCode());
         result = prime * result + ((humidityBelowMinAlertValue == null) ? 0 : humidityBelowMinAlertValue.hashCode());
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((monitorable == null) ? 0 : monitorable.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
         result = prime * result + ((plottable == null) ? 0 : plottable.hashCode());
-        result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((temperature == null) ? 0 : temperature.hashCode());
         result = prime * result
                 + ((temperatureAboveMaxAlertValue == null) ? 0 : temperatureAboveMaxAlertValue.hashCode());
@@ -329,15 +260,11 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+
+        if (!super.equals(obj)) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+
         VerisureClimateBaseJSON other = (VerisureClimateBaseJSON) obj;
         if (humidity == null) {
             if (other.humidity != null) {
@@ -360,20 +287,6 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
         } else if (!humidityBelowMinAlertValue.equals(other.humidityBelowMinAlertValue)) {
             return false;
         }
-        if (id == null) {
-            if (other.id != null) {
-                return false;
-            }
-        } else if (!id.equals(other.id)) {
-            return false;
-        }
-        if (location == null) {
-            if (other.location != null) {
-                return false;
-            }
-        } else if (!location.equals(other.location)) {
-            return false;
-        }
         if (monitorable == null) {
             if (other.monitorable != null) {
                 return false;
@@ -381,25 +294,11 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
         } else if (!monitorable.equals(other.monitorable)) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
         if (plottable == null) {
             if (other.plottable != null) {
                 return false;
             }
         } else if (!plottable.equals(other.plottable)) {
-            return false;
-        }
-        if (status == null) {
-            if (other.status != null) {
-                return false;
-            }
-        } else if (!status.equals(other.status)) {
             return false;
         }
         if (temperature == null) {
@@ -469,16 +368,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseObjectJSON {
             builder.append(type);
             builder.append(", ");
         }
-        if (id != null) {
-            builder.append("id=");
-            builder.append(id);
-            builder.append(", ");
-        }
-        if (location != null) {
-            builder.append("location=");
-            builder.append(location);
-        }
         builder.append("]");
-        return builder.toString();
+        return super.toString() + "\n" + builder.toString();
     }
 }

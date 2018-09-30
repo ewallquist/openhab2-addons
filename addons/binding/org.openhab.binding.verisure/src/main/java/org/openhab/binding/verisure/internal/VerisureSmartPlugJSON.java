@@ -16,13 +16,7 @@ import com.google.gson.annotations.SerializedName;
  * @author Jarle Hjortland
  *
  */
-public class VerisureSmartPlugJSON implements VerisureObjectJSON {
-
-    @SerializedName("location")
-    private String location;
-
-    @SerializedName("status")
-    private String status;
+public class VerisureSmartPlugJSON extends VerisureBaseThingJSON {
 
     @SerializedName("statusText")
     private String statusText;
@@ -51,9 +45,7 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((location == null) ? 0 : location.hashCode());
         result = prime * result + ((deviceLabel == null) ? 0 : deviceLabel.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((statusText == null) ? 0 : statusText.hashCode());
         result = prime * result + ((hazardous == null) ? 0 : hazardous.hashCode());
         return result;
@@ -66,35 +58,17 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+
+        if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof VerisureSmartPlugJSON)) {
-            return false;
-        }
+
         VerisureSmartPlugJSON other = (VerisureSmartPlugJSON) obj;
-        if (location == null) {
-            if (other.location != null) {
-                return false;
-            }
-        } else if (!location.equals(other.location)) {
-            return false;
-        }
         if (deviceLabel == null) {
             if (other.deviceLabel != null) {
                 return false;
             }
         } else if (!deviceLabel.equals(other.deviceLabel)) {
-            return false;
-        }
-        if (status == null) {
-            if (other.status != null) {
-                return false;
-            }
-        } else if (!status.equals(other.status)) {
             return false;
         }
         if (statusText == null) {
@@ -141,23 +115,6 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
         this.status = statusText;
     }
 
-    @Override
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     public String getDeviceLabel() {
         return deviceLabel;
     }
@@ -170,16 +127,6 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("VerisureSmartPlugJSON [");
-        if (location != null) {
-            builder.append("location=");
-            builder.append(location);
-            builder.append(", ");
-        }
-        if (status != null) {
-            builder.append("status=");
-            builder.append(status);
-            builder.append(", ");
-        }
         if (statusText != null) {
             builder.append("statusText=");
             builder.append(statusText);
@@ -195,7 +142,7 @@ public class VerisureSmartPlugJSON implements VerisureObjectJSON {
             builder.append(deviceLabel);
         }
         builder.append("]");
-        return builder.toString();
+        return super.toString() + "\n" + builder.toString();
     }
 
 }

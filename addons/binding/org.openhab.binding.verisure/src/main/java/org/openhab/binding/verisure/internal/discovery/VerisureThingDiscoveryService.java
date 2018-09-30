@@ -20,13 +20,13 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.verisure.handler.VerisureBridgeHandler;
-import org.openhab.binding.verisure.handler.VerisureObjectHandler;
+import org.openhab.binding.verisure.handler.VerisureThingHandler;
 import org.openhab.binding.verisure.internal.VerisureAlarmJSON;
 import org.openhab.binding.verisure.internal.VerisureBroadbandConnectionJSON;
 import org.openhab.binding.verisure.internal.VerisureClimateBaseJSON;
 import org.openhab.binding.verisure.internal.VerisureDoorWindowsJSON;
-import org.openhab.binding.verisure.internal.VerisureObjectJSON;
 import org.openhab.binding.verisure.internal.VerisureSmartPlugJSON;
+import org.openhab.binding.verisure.internal.VerisureThingJSON;
 import org.openhab.binding.verisure.internal.VerisureUserPresenceJSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,17 +39,17 @@ import com.google.common.collect.Sets;
  * @author jarle hjortland
  *
  */
-public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
+public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
     private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets
-            .union(VerisureBridgeHandler.SUPPORTED_THING_TYPES, VerisureObjectHandler.SUPPORTED_THING_TYPES);
+            .union(VerisureBridgeHandler.SUPPORTED_THING_TYPES, VerisureThingHandler.SUPPORTED_THING_TYPES);
 
-    private Logger logger = LoggerFactory.getLogger(VerisureObjectDiscoveryService.class);
+    private Logger logger = LoggerFactory.getLogger(VerisureThingDiscoveryService.class);
 
     private final static int SEARCH_TIME = 60;
 
     private VerisureBridgeHandler verisureBridgeHandler;
 
-    public VerisureObjectDiscoveryService(VerisureBridgeHandler bridgeHandler) throws IllegalArgumentException {
+    public VerisureThingDiscoveryService(VerisureBridgeHandler bridgeHandler) throws IllegalArgumentException {
         // super(SEARCH_TIME);
         super(SUPPORTED_THING_TYPES, SEARCH_TIME);
 
@@ -60,18 +60,18 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
     @Override
     public void startScan() {
         removeOlderResults(getTimestampOfLastScan());
-        logger.debug("VerisureObjectDiscoveryService:startScan");
+        logger.debug("VerisureThingDiscoveryService:startScan");
 
-        HashMap<String, VerisureObjectJSON> verisureObjects = verisureBridgeHandler.getSession().getVerisureObjects();
+        HashMap<String, VerisureThingJSON> verisureThings = verisureBridgeHandler.getSession().getVerisureThings();
 
-        for (Map.Entry<String, VerisureObjectJSON> entry : verisureObjects.entrySet()) {
+        for (Map.Entry<String, VerisureThingJSON> entry : verisureThings.entrySet()) {
             logger.info(entry.getValue().toString());
-            onObjectAddedInternal(entry.getValue());
+            onThingAddedInternal(entry.getValue());
         }
     }
 
-    private void onObjectAddedInternal(VerisureObjectJSON value) {
-        logger.debug("VerisureObjectDiscoveryService:OnObjectAddedInternal");
+    private void onThingAddedInternal(VerisureThingJSON value) {
+        logger.debug("VerisureThingDiscoveryService:OnThingAddedInternal");
         ThingUID thingUID = getThingUID(value);
         if (thingUID != null) {
             ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
@@ -89,12 +89,18 @@ public class VerisureObjectDiscoveryService extends AbstractDiscoveryService {
     public void activate() {
     }
 
-    private ThingUID getThingUID(VerisureObjectJSON voj) {
+    private ThingUID getThingUID(VerisureThingJSON voj) {
         ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
 
         ThingUID tuid = null;
         if (voj instanceof VerisureAlarmJSON) {
-            tuid = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            if (((VerisureAlarmJSON) voj).getType().equals("ARM_STATE")) {
+                tuid = new ThingUID(THING_TYPE_ALARM, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            } else if (((VerisureAlarmJSON) voj).getType().equals("DOOR_LOCK")) {
+                tuid = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+            } else {
+                logger.error("Unknown alarm/lock device:" + ((VerisureAlarmJSON) voj).getType());
+            }
         } else if (voj instanceof VerisureUserPresenceJSON) {
             tuid = new ThingUID(THING_TYPE_USERPRESENCE, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
         } else if (voj instanceof VerisureDoorWindowsJSON) {

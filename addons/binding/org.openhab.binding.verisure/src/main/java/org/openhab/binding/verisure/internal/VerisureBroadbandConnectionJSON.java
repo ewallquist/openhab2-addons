@@ -16,18 +16,12 @@ import com.google.gson.annotations.SerializedName;
  * @author Jan Gustafsson
  *
  */
-public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
+public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
     @SerializedName("date")
     private String date;
 
     @SerializedName("hasWifi")
     private Boolean hasWifi;
-
-    @SerializedName("status")
-    private String status;
-
-    private String id;
-    private String location;
 
     /**
      * @return the date
@@ -41,20 +35,6 @@ public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
      */
     public void setDate(String date) {
         this.date = date;
-    }
-
-    /**
-     * @return broadband status
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * @param status of broadband connection
-     */
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     /**
@@ -73,17 +53,7 @@ public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
 
     @Override
     public String getId() {
-        return status;
-    }
-
-    @Override
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    @Override
-    public String getLocation() {
-        return location;
+        return "broadband_" + id;
     }
 
     /*
@@ -96,7 +66,6 @@ public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((date == null) ? 0 : date.hashCode());
-        result = prime * result + ((status == null) ? 0 : status.hashCode());
         result = prime * result + ((hasWifi == null) ? 0 : hasWifi.hashCode());
         return result;
     }
@@ -108,23 +77,12 @@ public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null) {
+
+        if (!super.equals(obj)) {
             return false;
         }
-        if (!(obj instanceof VerisureBroadbandConnectionJSON)) {
-            return false;
-        }
+
         VerisureBroadbandConnectionJSON other = (VerisureBroadbandConnectionJSON) obj;
-        if (status == null) {
-            if (other.status != null) {
-                return false;
-            }
-        } else if (!status.equals(other.status)) {
-            return false;
-        }
         if (hasWifi == null) {
             if (other.hasWifi != null) {
                 return false;
@@ -141,4 +99,28 @@ public class VerisureBroadbandConnectionJSON implements VerisureObjectJSON {
         }
         return true;
     }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("VerisureBroadbandConnectionJSON [");
+        if (date != null) {
+            builder.append("date=");
+            builder.append(date);
+            builder.append(", ");
+        }
+        if (hasWifi != null) {
+            builder.append("hasWifi=");
+            builder.append(hasWifi);
+            builder.append(", ");
+        }
+        builder.append("]");
+        return super.toString() + "\n" + builder.toString();
+    }
+
 }

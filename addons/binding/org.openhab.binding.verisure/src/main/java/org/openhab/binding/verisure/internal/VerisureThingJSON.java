@@ -8,17 +8,25 @@
  */
 package org.openhab.binding.verisure.internal;
 
+import java.math.BigDecimal;
+
 /**
  * The base identifer of all Verisure response objects.
  *
  * @author Jarle Hjortland
  *
  */
-public interface VerisureObjectJSON {
+public interface VerisureThingJSON {
     public String getId();
 
     public void setId(String id);
 
     public String getLocation();
+
+    public void setSiteName(String siteName);
+
+    public void setSiteId(BigDecimal siteId);
+
+    public BigDecimal getSiteId();
 
 }

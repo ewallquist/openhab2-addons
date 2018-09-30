@@ -21,8 +21,8 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.openhab.binding.verisure.handler.VerisureBridgeHandler;
-import org.openhab.binding.verisure.handler.VerisureObjectHandler;
-import org.openhab.binding.verisure.internal.discovery.VerisureObjectDiscoveryService;
+import org.openhab.binding.verisure.handler.VerisureThingHandler;
+import org.openhab.binding.verisure.internal.discovery.VerisureThingDiscoveryService;
 import org.osgi.framework.ServiceRegistration;
 
 import com.google.common.collect.Sets;
@@ -36,7 +36,7 @@ import com.google.common.collect.Sets;
 public class VerisureHandlerFactory extends BaseThingHandlerFactory {
 
     private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets
-            .union(VerisureBridgeHandler.SUPPORTED_THING_TYPES, VerisureObjectHandler.SUPPORTED_THING_TYPES);
+            .union(VerisureBridgeHandler.SUPPORTED_THING_TYPES, VerisureThingHandler.SUPPORTED_THING_TYPES);
 
     private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
@@ -53,15 +53,15 @@ public class VerisureHandlerFactory extends BaseThingHandlerFactory {
             registerObjectDiscoveryService(handler);
             return handler;
 
-        } else if (VerisureObjectHandler.SUPPORTED_THING_TYPES.contains(thing.getThingTypeUID())) {
-            return new VerisureObjectHandler(thing);
+        } else if (VerisureThingHandler.SUPPORTED_THING_TYPES.contains(thing.getThingTypeUID())) {
+            return new VerisureThingHandler(thing);
         }
         return null;
 
     }
 
     private synchronized void registerObjectDiscoveryService(VerisureBridgeHandler bridgeHandler) {
-        VerisureObjectDiscoveryService discoveryService = new VerisureObjectDiscoveryService(bridgeHandler);
+        VerisureThingDiscoveryService discoveryService = new VerisureThingDiscoveryService(bridgeHandler);
         discoveryService.activate();
         this.discoveryServiceRegs.put(bridgeHandler.getThing().getUID(), bundleContext
                 .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
