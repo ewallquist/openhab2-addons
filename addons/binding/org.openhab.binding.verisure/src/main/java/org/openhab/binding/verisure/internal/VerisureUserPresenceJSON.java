@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,24 +8,28 @@
  */
 package org.openhab.binding.verisure.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * THe presence detector in Verisure.
  *
- * @author Jarle Hjortland
+ * @author Jan Gustafsson - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
 
     @SerializedName("webAccount")
-    private String webAccount;
+    private @Nullable String webAccount;
 
     @SerializedName("userTrackingLocationStatus")
-    private String userTrackingLocationStatus;
+    private @Nullable String userTrackingLocationStatus;
 
     @SerializedName("currentLocationName")
-    private String currentLocationName;
+    private @Nullable String currentLocationName;
 
     public VerisureUserPresenceJSON(String id, String webAccount, String userLocationStatus, String userLocationName) {
         super();
@@ -36,11 +40,11 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
     }
 
     @Override
-    public String getId() {
+    public @Nullable String getId() {
         return "userpresence_" + id;
     }
 
-    public String getWebAccount() {
+    public @Nullable String getWebAccount() {
         return webAccount;
     }
 
@@ -48,7 +52,7 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
         this.webAccount = webAccount;
     }
 
-    public String getUserLocationStatus() {
+    public @Nullable String getUserLocationStatus() {
         return userTrackingLocationStatus;
     }
 
@@ -57,7 +61,7 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
     }
 
     @Override
-    public String getLocation() {
+    public @Nullable String getLocation() {
         return currentLocationName;
     }
 
@@ -71,6 +75,7 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
      *
      * @see java.lang.Object#hashCode()
      */
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -87,9 +92,15 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
 
+        if (this == obj) {
+            return true;
+        }
         if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof VerisureUserPresenceJSON)) {
             return false;
         }
 
@@ -98,21 +109,22 @@ public class VerisureUserPresenceJSON extends VerisureBaseThingJSON {
             if (other.userTrackingLocationStatus != null) {
                 return false;
             }
-        } else if (!userTrackingLocationStatus.equals(other.userTrackingLocationStatus)) {
+        } else if (userTrackingLocationStatus != null
+                && !userTrackingLocationStatus.equals(other.userTrackingLocationStatus)) {
             return false;
         }
         if (webAccount == null) {
             if (other.webAccount != null) {
                 return false;
             }
-        } else if (!webAccount.equals(other.webAccount)) {
+        } else if (webAccount != null && !webAccount.equals(other.webAccount)) {
             return false;
         }
         if (currentLocationName == null) {
             if (other.currentLocationName != null) {
                 return false;
             }
-        } else if (!currentLocationName.equals(other.currentLocationName)) {
+        } else if (currentLocationName != null && !currentLocationName.equals(other.currentLocationName)) {
             return false;
         }
         return true;

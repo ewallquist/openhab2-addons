@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,25 +8,29 @@
  */
 package org.openhab.binding.verisure.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * THe Broadband connection in Verisure.
  *
- * @author Jan Gustafsson
+ * @author Jan Gustafsson - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
     @SerializedName("date")
-    private String date;
+    private @Nullable String date;
 
     @SerializedName("hasWifi")
-    private Boolean hasWifi;
+    private @Nullable Boolean hasWifi;
 
     /**
      * @return the date
      */
-    public String getDate() {
+    public @Nullable String getDate() {
         return date;
     }
 
@@ -40,7 +44,7 @@ public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
     /**
      * @return WiFi status
      */
-    public Boolean hasWiFi() {
+    public @Nullable Boolean hasWiFi() {
         return hasWifi;
     }
 
@@ -52,7 +56,7 @@ public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
     }
 
     @Override
-    public String getId() {
+    public @Nullable String getId() {
         return "broadband_" + id;
     }
 
@@ -61,6 +65,7 @@ public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
      *
      * @see java.lang.Object#hashCode()
      */
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -76,9 +81,15 @@ public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
 
+        if (this == obj) {
+            return true;
+        }
         if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof VerisureClimateBaseJSON)) {
             return false;
         }
 
@@ -87,14 +98,14 @@ public class VerisureBroadbandConnectionJSON extends VerisureBaseThingJSON {
             if (other.hasWifi != null) {
                 return false;
             }
-        } else if (!hasWifi.equals(other.hasWifi)) {
+        } else if (hasWifi != null && !hasWifi.equals(other.hasWifi)) {
             return false;
         }
         if (date == null) {
             if (other.date != null) {
                 return false;
             }
-        } else if (!date.equals(other.date)) {
+        } else if (date != null && !date.equals(other.date)) {
             return false;
         }
         return true;

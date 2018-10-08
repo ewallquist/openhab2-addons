@@ -224,70 +224,50 @@ public class SmhiWeatherHandler extends BaseThingHandler {
 
     private State getHumidity() {
         if (weatherData != null) {
-            DecimalType humidity = new DecimalType(weatherData.getHumidity());
-            if (humidity != null) {
-                return humidity;
-            }
+            return new DecimalType(weatherData.getHumidity());
         }
         return UnDefType.UNDEF;
     }
 
     private State getPressure() {
         if (weatherData != null) {
-            DecimalType pressure = new DecimalType(weatherData.getPressure());
-            if (pressure != null) {
-                return pressure;
-            }
+            return new DecimalType(weatherData.getPressure());
         }
         return UnDefType.UNDEF;
     }
 
     private State getTemperature() {
         if (weatherData != null) {
-            DecimalType temp = new DecimalType(weatherData.getTemperature());
-            if (temp != null) {
-                return temp;
-            }
+            return new DecimalType(weatherData.getTemperature());
         }
         return UnDefType.UNDEF;
     }
 
     private State getWindSpeed() {
         if (weatherData != null) {
-            DecimalType windSpeed = new DecimalType(weatherData.getWindVelocity());
-            if (windSpeed != null) {
-                return windSpeed;
-            }
+            return new DecimalType(weatherData.getWindVelocity());
         }
         return UnDefType.UNDEF;
     }
 
     private State getWindDirection() {
         if (weatherData != null) {
-            DecimalType windDirection = new DecimalType(weatherData.getWindDirection());
-            if (windDirection != null) {
-                return windDirection;
-            }
+            return new DecimalType(weatherData.getWindDirection());
         }
         return UnDefType.UNDEF;
     }
 
     private State getThunderProbability() {
         if (weatherData != null) {
-            DecimalType thunderProbability = new DecimalType(weatherData.getProbabilityThunderstorm());
-            if (thunderProbability != null) {
-                return thunderProbability;
-            }
+            return new DecimalType(weatherData.getProbabilityThunderstorm());
         }
         return UnDefType.UNDEF;
     }
 
     private State getWeatherSymbol() {
         if (weatherData != null) {
-            DecimalType weatherSymbol = new DecimalType(weatherData.getWeatherSymbol());
-            if (weatherSymbol != null) {
-                return weatherSymbol;
-            }
+            return new DecimalType(weatherData.getWeatherSymbol());
+
         }
         return UnDefType.UNDEF;
     }

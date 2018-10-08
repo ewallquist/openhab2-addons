@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,31 +10,35 @@ package org.openhab.binding.verisure.internal;
 
 import java.math.BigDecimal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * A base JSON thing for other Verisure things to inherit.
  *
- * @author Jarle Hjortland
+ * @author Jarle Hjortland - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureBaseThingJSON implements VerisureThingJSON {
 
     @SerializedName("id")
-    protected String id;
+    protected @Nullable String id;
 
     @SerializedName("name")
-    protected String name;
+    protected @Nullable String name;
 
     @SerializedName("location")
-    protected String location;
+    protected @Nullable String location;
 
     @SerializedName("status")
-    protected String status;
+    protected @Nullable String status;
 
-    protected String siteName;
+    protected @Nullable String siteName;
 
-    protected BigDecimal siteId;
+    protected @Nullable BigDecimal siteId;
 
     public VerisureBaseThingJSON() {
         super();
@@ -45,7 +49,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
      * @return
      *         The status
      */
-    public String getStatus() {
+    public @Nullable String getStatus() {
         return status;
     }
 
@@ -61,7 +65,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
     /**
      * @return the name
      */
-    public String getName() {
+    public @Nullable String getName() {
         return name;
     }
 
@@ -76,7 +80,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
      * @return the id
      */
     @Override
-    public String getId() {
+    public @Nullable String getId() {
         return id;
     }
 
@@ -84,7 +88,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
      * @param id the id to set
      */
     @Override
-    public void setId(String id) {
+    public void setId(@Nullable String id) {
         this.id = id;
     }
 
@@ -92,7 +96,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
      * @return the location
      */
     @Override
-    public String getLocation() {
+    public @Nullable String getLocation() {
         return location;
     }
 
@@ -103,25 +107,26 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
         this.location = location;
     }
 
-    public String getSiteName() {
+    public @Nullable String getSiteName() {
         return siteName;
     }
 
     @Override
-    public void setSiteName(String siteName) {
+    public void setSiteName(@Nullable String siteName) {
         this.siteName = siteName;
     }
 
     @Override
-    public BigDecimal getSiteId() {
+    public @Nullable BigDecimal getSiteId() {
         return siteId;
     }
 
     @Override
-    public void setSiteId(BigDecimal siteId) {
+    public void setSiteId(@Nullable BigDecimal siteId) {
         this.siteId = siteId;
     }
 
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -141,11 +146,14 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
-        if (obj == null || this.getClass() != obj.getClass()) {
+        if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof VerisureBaseThingJSON)) {
             return false;
         }
 
@@ -154,7 +162,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.id != null) {
                 return false;
             }
-        } else if (!id.equals(other.id)) {
+        } else if (id != null && !id.equals(other.id)) {
             return false;
         }
 
@@ -162,7 +170,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.name != null) {
                 return false;
             }
-        } else if (!name.equals(other.name)) {
+        } else if (name != null && !name.equals(other.name)) {
             return false;
         }
 
@@ -170,7 +178,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.location != null) {
                 return false;
             }
-        } else if (!location.equals(other.location)) {
+        } else if (location != null && !location.equals(other.location)) {
             return false;
         }
 
@@ -178,7 +186,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.status != null) {
                 return false;
             }
-        } else if (!status.equals(other.status)) {
+        } else if (status != null && !status.equals(other.status)) {
             return false;
         }
 
@@ -186,7 +194,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.siteName != null) {
                 return false;
             }
-        } else if (!siteName.equals(other.siteName)) {
+        } else if (siteName != null && !siteName.equals(other.siteName)) {
             return false;
         }
 
@@ -194,7 +202,7 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
             if (other.siteId != null) {
                 return false;
             }
-        } else if (!siteId.equals(other.siteId)) {
+        } else if (siteId != null && !siteId.equals(other.siteId)) {
             return false;
         }
 
@@ -235,7 +243,9 @@ public class VerisureBaseThingJSON implements VerisureThingJSON {
         }
         if (siteId != null) {
             builder.append("siteId=");
-            builder.append(siteId.toString());
+            if (siteId != null) {
+                builder.append(siteId.toString());
+            }
         }
         builder.append("]");
         return builder.toString();

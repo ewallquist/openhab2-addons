@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,24 +8,28 @@
  */
 package org.openhab.binding.verisure.internal;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * The status of a door or window.
  *
- * @author Jarle Hjortland
+ * @author Jarle Hjortland - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
 
     @SerializedName("area")
-    private String area;
+    private @Nullable String area;
 
     @SerializedName("state")
-    private String state;
+    private @Nullable String state;
 
     @SerializedName("deviceLabel")
-    private String deviceLabel;
+    private @Nullable String deviceLabel;
 
     public VerisureDoorWindowsJSON(String id, String state, String location) {
         super();
@@ -34,7 +38,7 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
         this.deviceLabel = id;
     }
 
-    public String getState() {
+    public @Nullable String getState() {
         return state;
     }
 
@@ -42,7 +46,7 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
         this.state = state;
     }
 
-    public String getArea() {
+    public @Nullable String getArea() {
         return area;
     }
 
@@ -50,7 +54,7 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
         this.area = area;
     }
 
-    public String getDeviceLabel() {
+    public @Nullable String getDeviceLabel() {
         return deviceLabel;
     }
 
@@ -59,17 +63,17 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
     }
 
     @Override
-    public String getLocation() {
+    public @Nullable String getLocation() {
         return area;
     }
 
     @Override
-    public void setId(String id) {
+    public void setId(@Nullable String id) {
         this.deviceLabel = id;
     }
 
     @Override
-    public String getId() {
+    public @Nullable String getId() {
         return deviceLabel;
     }
 
@@ -78,6 +82,7 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
      *
      * @see java.lang.Object#hashCode()
      */
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -94,9 +99,15 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
 
+        if (this == obj) {
+            return true;
+        }
         if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof VerisureDoorWindowsJSON)) {
             return false;
         }
 
@@ -105,21 +116,21 @@ public class VerisureDoorWindowsJSON extends VerisureBaseThingJSON {
             if (other.area != null) {
                 return false;
             }
-        } else if (!area.equals(other.area)) {
+        } else if (area != null && !area.equals(other.area)) {
             return false;
         }
         if (deviceLabel == null) {
             if (other.deviceLabel != null) {
                 return false;
             }
-        } else if (!deviceLabel.equals(other.deviceLabel)) {
+        } else if (deviceLabel != null && !deviceLabel.equals(other.deviceLabel)) {
             return false;
         }
         if (state == null) {
             if (other.state != null) {
                 return false;
             }
-        } else if (!state.equals(other.state)) {
+        } else if (state != null && !state.equals(other.state)) {
             return false;
         }
         return true;

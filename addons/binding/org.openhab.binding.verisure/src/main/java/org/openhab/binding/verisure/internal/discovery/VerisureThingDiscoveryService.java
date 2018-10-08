@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -14,6 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
 import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
@@ -25,6 +27,7 @@ import org.openhab.binding.verisure.internal.VerisureAlarmJSON;
 import org.openhab.binding.verisure.internal.VerisureBroadbandConnectionJSON;
 import org.openhab.binding.verisure.internal.VerisureClimateBaseJSON;
 import org.openhab.binding.verisure.internal.VerisureDoorWindowsJSON;
+import org.openhab.binding.verisure.internal.VerisureSession;
 import org.openhab.binding.verisure.internal.VerisureSmartPlugJSON;
 import org.openhab.binding.verisure.internal.VerisureThingJSON;
 import org.openhab.binding.verisure.internal.VerisureUserPresenceJSON;
@@ -36,9 +39,10 @@ import com.google.common.collect.Sets;
 /**
  * The discovery service, notified by a listener on the VerisureSession.
  *
- * @author jarle hjortland
+ * @author Jarle Hjortland - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
     private final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets
             .union(VerisureBridgeHandler.SUPPORTED_THING_TYPES, VerisureThingHandler.SUPPORTED_THING_TYPES);
@@ -47,7 +51,7 @@ public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
 
     private final static int SEARCH_TIME = 60;
 
-    private VerisureBridgeHandler verisureBridgeHandler;
+    private @Nullable VerisureBridgeHandler verisureBridgeHandler;
 
     public VerisureThingDiscoveryService(VerisureBridgeHandler bridgeHandler) throws IllegalArgumentException {
         // super(SEARCH_TIME);
@@ -62,11 +66,19 @@ public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
         removeOlderResults(getTimestampOfLastScan());
         logger.debug("VerisureThingDiscoveryService:startScan");
 
-        HashMap<String, VerisureThingJSON> verisureThings = verisureBridgeHandler.getSession().getVerisureThings();
+        if (verisureBridgeHandler != null) {
+            VerisureSession session = verisureBridgeHandler.getSession();
+            if (session != null) {
+                HashMap<String, @Nullable VerisureThingJSON> verisureThings = session.getVerisureThings();
 
-        for (Map.Entry<String, VerisureThingJSON> entry : verisureThings.entrySet()) {
-            logger.info(entry.getValue().toString());
-            onThingAddedInternal(entry.getValue());
+                for (Map.Entry<String, @Nullable VerisureThingJSON> entry : verisureThings.entrySet()) {
+                    VerisureThingJSON thing = entry.getValue();
+                    if (thing != null) {
+                        logger.info(thing.toString());
+                        onThingAddedInternal(thing);
+                    }
+                }
+            }
         }
     }
 
@@ -74,12 +86,14 @@ public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
         logger.debug("VerisureThingDiscoveryService:OnThingAddedInternal");
         ThingUID thingUID = getThingUID(value);
         if (thingUID != null) {
-            ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
-            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withBridge(bridgeUID)
-                    .withLabel(value.getId()).build();
+            if (verisureBridgeHandler != null) {
+                ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
+                DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID).withBridge(bridgeUID)
+                        .withLabel(value.getId()).build();
 
-            logger.debug("thinguid: {}, bridge {}, label {}", thingUID.toString(), bridgeUID, value.getId());
-            thingDiscovered(discoveryResult);
+                logger.debug("thinguid: {}, bridge {}, label {}", thingUID.toString(), bridgeUID, value.getId());
+                thingDiscovered(discoveryResult);
+            }
         } else {
             logger.debug("discovered unsupported thing of type '{}' with id {}", value.getId(), value.getId());
         }
@@ -89,42 +103,78 @@ public class VerisureThingDiscoveryService extends AbstractDiscoveryService {
     public void activate() {
     }
 
-    private ThingUID getThingUID(VerisureThingJSON voj) {
-        ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
-
-        ThingUID tuid = null;
-        if (voj instanceof VerisureAlarmJSON) {
-            if (((VerisureAlarmJSON) voj).getType().equals("ARM_STATE")) {
-                tuid = new ThingUID(THING_TYPE_ALARM, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-            } else if (((VerisureAlarmJSON) voj).getType().equals("DOOR_LOCK")) {
-                tuid = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
+    private @Nullable ThingUID getThingUID(VerisureThingJSON voj) {
+        ThingUID thingUID = null;
+        if (verisureBridgeHandler != null) {
+            ThingUID bridgeUID = verisureBridgeHandler.getThing().getUID();
+            if (voj instanceof VerisureAlarmJSON) {
+                String type = ((VerisureAlarmJSON) voj).getType();
+                if (type != null) {
+                    if (type.equals("ARM_STATE")) {
+                        String id = voj.getId();
+                        if (id != null) {
+                            thingUID = new ThingUID(THING_TYPE_ALARM, bridgeUID, id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                        }
+                    } else if (type.equals("DOOR_LOCK")) {
+                        String id = voj.getId();
+                        if (id != null) {
+                            thingUID = new ThingUID(THING_TYPE_SMARTLOCK, bridgeUID,
+                                    id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                        }
+                    } else {
+                        logger.error("Unknown alarm/lock device:" + ((VerisureAlarmJSON) voj).getType());
+                    }
+                }
+            } else if (voj instanceof VerisureUserPresenceJSON) {
+                String id = voj.getId();
+                if (id != null) {
+                    thingUID = new ThingUID(THING_TYPE_USERPRESENCE, bridgeUID, id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                }
+            } else if (voj instanceof VerisureDoorWindowsJSON) {
+                String id = voj.getId();
+                if (id != null) {
+                    thingUID = new ThingUID(THING_TYPE_DOORWINDOW, bridgeUID, id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                }
+            } else if (voj instanceof VerisureSmartPlugJSON) {
+                String id = voj.getId();
+                if (id != null) {
+                    thingUID = new ThingUID(THING_TYPE_SMARTPLUG, bridgeUID, id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                }
+            } else if (voj instanceof VerisureClimateBaseJSON) {
+                String type = ((VerisureClimateBaseJSON) voj).getType();
+                if (type != null) {
+                    if (type.equalsIgnoreCase("Smoke detector")) {
+                        String id = voj.getId();
+                        if (id != null) {
+                            thingUID = new ThingUID(THING_TYPE_SMOKEDETECTOR, bridgeUID,
+                                    id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                        }
+                    } else if (type.equalsIgnoreCase("Water detector")) {
+                        String id = voj.getId();
+                        if (id != null) {
+                            thingUID = new ThingUID(THING_TYPE_WATERDETETOR, bridgeUID,
+                                    id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                        }
+                    } else if (type.equalsIgnoreCase("Siren")) {
+                        String id = voj.getId();
+                        if (id != null) {
+                            thingUID = new ThingUID(THING_TYPE_SIREN, bridgeUID, id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                        }
+                    } else {
+                        logger.error("Unknown climate device:" + ((VerisureClimateBaseJSON) voj).getType());
+                    }
+                }
+            } else if (voj instanceof VerisureBroadbandConnectionJSON) {
+                String id = voj.getId();
+                if (id != null) {
+                    thingUID = new ThingUID(THING_TYPE_BROADBAND_CONNECTION, bridgeUID,
+                            id.replaceAll("[^a-zA-Z0-9_]", "_"));
+                }
             } else {
-                logger.error("Unknown alarm/lock device:" + ((VerisureAlarmJSON) voj).getType());
+                logger.error("Unsupported JSON!");
             }
-        } else if (voj instanceof VerisureUserPresenceJSON) {
-            tuid = new ThingUID(THING_TYPE_USERPRESENCE, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-        } else if (voj instanceof VerisureDoorWindowsJSON) {
-            tuid = new ThingUID(THING_TYPE_DOORWINDOW, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-        } else if (voj instanceof VerisureSmartPlugJSON) {
-            tuid = new ThingUID(THING_TYPE_SMARTPLUG, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-        } else if (voj instanceof VerisureClimateBaseJSON) {
-            if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Smoke detector")) {
-                tuid = new ThingUID(THING_TYPE_SMOKEDETECTOR, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-            } else if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Water detector")) {
-                tuid = new ThingUID(THING_TYPE_WATERDETETOR, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-            } else if (((VerisureClimateBaseJSON) voj).getType().equalsIgnoreCase("Siren")) {
-                tuid = new ThingUID(THING_TYPE_SIREN, bridgeUID, voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-            } else {
-                logger.error("Unknown climate device:" + ((VerisureClimateBaseJSON) voj).getType());
-            }
-        } else if (voj instanceof VerisureBroadbandConnectionJSON) {
-            tuid = new ThingUID(THING_TYPE_BROADBAND_CONNECTION, bridgeUID,
-                    voj.getId().replaceAll("[^a-zA-Z0-9_]", "_"));
-        } else {
-            logger.error("Unsupported JSON!");
         }
-
-        return tuid;
+        return thingUID;
     }
 
 }

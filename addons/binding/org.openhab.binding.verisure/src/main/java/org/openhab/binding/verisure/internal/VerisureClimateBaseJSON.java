@@ -1,60 +1,63 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-
 package org.openhab.binding.verisure.internal;
+
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 
 /**
  * An sensor in the verisure system, normally smoke detectors.
  *
- * @author Jarle Hjortland
+ * @author Jarle Hjortland - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
 
     @SerializedName("temperatureBelowMinAlertValue")
-    protected String temperatureBelowMinAlertValue;
+    protected @Nullable String temperatureBelowMinAlertValue;
 
     @SerializedName("temperatureAboveMaxAlertValue")
-    protected String temperatureAboveMaxAlertValue;
+    protected @Nullable String temperatureAboveMaxAlertValue;
 
     @SerializedName("temperature")
-    protected String temperature;
+    protected @Nullable String temperature;
 
     @SerializedName("plottable")
-    protected Boolean plottable;
+    protected @Nullable Boolean plottable;
 
     @SerializedName("monitorable")
-    protected Boolean monitorable;
+    protected @Nullable Boolean monitorable;
 
     @SerializedName("humidity")
-    protected String humidity;
+    protected @Nullable String humidity;
 
     @SerializedName("humidityBelowMinAlertValue")
-    protected String humidityBelowMinAlertValue;
+    protected @Nullable String humidityBelowMinAlertValue;
 
     @SerializedName("humidityAboveMaxAlertValue")
-    protected String humidityAboveMaxAlertValue;
+    protected @Nullable String humidityAboveMaxAlertValue;
 
     @SerializedName("type")
-    protected String type;
+    protected @Nullable String type;
 
     @SerializedName("timestamp")
-    protected String timestamp;
+    protected @Nullable String timestamp;
 
     /**
      *
      * @return
      *         The temperatureBelowMinAlertValue
      */
-    public String getTemperatureBelowMinAlertValue() {
+    public @Nullable String getTemperatureBelowMinAlertValue() {
         return temperatureBelowMinAlertValue;
     }
 
@@ -72,7 +75,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The temperatureAboveMaxAlertValue
      */
-    public String getTemperatureAboveMaxAlertValue() {
+    public @Nullable String getTemperatureAboveMaxAlertValue() {
         return temperatureAboveMaxAlertValue;
     }
 
@@ -90,7 +93,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The temperature
      */
-    public String getTemperature() {
+    public @Nullable String getTemperature() {
         return temperature;
     }
 
@@ -108,7 +111,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The plottable
      */
-    public Boolean getPlottable() {
+    public @Nullable Boolean getPlottable() {
         return plottable;
     }
 
@@ -126,7 +129,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The monitorable
      */
-    public Boolean getMonitorable() {
+    public @Nullable Boolean getMonitorable() {
         return monitorable;
     }
 
@@ -144,7 +147,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The humidity
      */
-    public String getHumidity() {
+    public @Nullable String getHumidity() {
         return humidity;
     }
 
@@ -162,7 +165,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The humidityBelowMinAlertValue
      */
-    public String getHumidityBelowMinAlertValue() {
+    public @Nullable String getHumidityBelowMinAlertValue() {
         return humidityBelowMinAlertValue;
     }
 
@@ -180,7 +183,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The humidityAboveMaxAlertValue
      */
-    public String getHumidityAboveMaxAlertValue() {
+    public @Nullable String getHumidityAboveMaxAlertValue() {
         return humidityAboveMaxAlertValue;
     }
 
@@ -198,7 +201,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The timestamp
      */
-    public String getTimestamp() {
+    public @Nullable String getTimestamp() {
         return timestamp;
     }
 
@@ -216,7 +219,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @return
      *         The type of climate sensor
      */
-    public String getType() {
+    public @Nullable String getType() {
         return type;
     }
 
@@ -234,6 +237,7 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      *
      * @see java.lang.Object#hashCode()
      */
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -259,9 +263,15 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
 
+        if (this == obj) {
+            return true;
+        }
         if (!super.equals(obj)) {
+            return false;
+        }
+        if (!(obj instanceof VerisureClimateBaseJSON)) {
             return false;
         }
 
@@ -270,70 +280,74 @@ public class VerisureClimateBaseJSON extends VerisureBaseThingJSON {
             if (other.humidity != null) {
                 return false;
             }
-        } else if (!humidity.equals(other.humidity)) {
+        } else if (humidity != null && !humidity.equals(other.humidity)) {
             return false;
         }
         if (humidityAboveMaxAlertValue == null) {
             if (other.humidityAboveMaxAlertValue != null) {
                 return false;
             }
-        } else if (!humidityAboveMaxAlertValue.equals(other.humidityAboveMaxAlertValue)) {
+        } else if (humidityAboveMaxAlertValue != null
+                && !humidityAboveMaxAlertValue.equals(other.humidityAboveMaxAlertValue)) {
             return false;
         }
         if (humidityBelowMinAlertValue == null) {
             if (other.humidityBelowMinAlertValue != null) {
                 return false;
             }
-        } else if (!humidityBelowMinAlertValue.equals(other.humidityBelowMinAlertValue)) {
+        } else if (humidityBelowMinAlertValue != null
+                && !humidityBelowMinAlertValue.equals(other.humidityBelowMinAlertValue)) {
             return false;
         }
         if (monitorable == null) {
             if (other.monitorable != null) {
                 return false;
             }
-        } else if (!monitorable.equals(other.monitorable)) {
+        } else if (monitorable != null && !monitorable.equals(other.monitorable)) {
             return false;
         }
         if (plottable == null) {
             if (other.plottable != null) {
                 return false;
             }
-        } else if (!plottable.equals(other.plottable)) {
+        } else if (plottable != null && !plottable.equals(other.plottable)) {
             return false;
         }
         if (temperature == null) {
             if (other.temperature != null) {
                 return false;
             }
-        } else if (!temperature.equals(other.temperature)) {
+        } else if (temperature != null && !temperature.equals(other.temperature)) {
             return false;
         }
         if (temperatureAboveMaxAlertValue == null) {
             if (other.temperatureAboveMaxAlertValue != null) {
                 return false;
             }
-        } else if (!temperatureAboveMaxAlertValue.equals(other.temperatureAboveMaxAlertValue)) {
+        } else if (temperatureAboveMaxAlertValue != null
+                && !temperatureAboveMaxAlertValue.equals(other.temperatureAboveMaxAlertValue)) {
             return false;
         }
         if (temperatureBelowMinAlertValue == null) {
             if (other.temperatureBelowMinAlertValue != null) {
                 return false;
             }
-        } else if (!temperatureBelowMinAlertValue.equals(other.temperatureBelowMinAlertValue)) {
+        } else if (temperatureBelowMinAlertValue != null
+                && !temperatureBelowMinAlertValue.equals(other.temperatureBelowMinAlertValue)) {
             return false;
         }
         if (timestamp == null) {
             if (other.timestamp != null) {
                 return false;
             }
-        } else if (!timestamp.equals(other.timestamp)) {
+        } else if (timestamp != null && !timestamp.equals(other.timestamp)) {
             return false;
         }
         if (type == null) {
             if (other.type != null) {
                 return false;
             }
-        } else if (!type.equals(other.type)) {
+        } else if (type != null && !type.equals(other.type)) {
             return false;
         }
         return true;

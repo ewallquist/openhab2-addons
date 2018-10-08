@@ -473,7 +473,7 @@
     
     <channel-type id="smartLockVoiceLevel">
         <item-type>String</item-type>
-        <label>SmartLock Voice Kevel Setting</label>
+        <label>SmartLock Voice Level Setting</label>
         <description>Verisure SmartLock voice level setting.</description>
         <state readOnly="true">
         </state>

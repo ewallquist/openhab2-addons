@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -10,26 +10,30 @@ package org.openhab.binding.verisure.internal;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.google.gson.annotations.SerializedName;
 
 /**
  * The SmartLock state of the Verisure System.
  *
- * @author Jan Gustafsson
+ * @author Jan Gustafsson - Initial contribution
  *
  */
+@NonNullByDefault
 public class VerisureSmartLockJSON extends VerisureAlarmJSON {
 
     @SerializedName("autoRelockEnabled")
-    private Boolean autoRelockEnabled;
+    private @Nullable Boolean autoRelockEnabled;
 
     @SerializedName("deviceLabel")
-    private String deviceLabel;
+    private @Nullable String deviceLabel;
 
     @SerializedName("doorLockVolumeSettings")
-    private DoorLockVolumeSettings doorLockVolumeSettings;
+    private @Nullable DoorLockVolumeSettings doorLockVolumeSettings;
 
-    public Boolean getAutoRelockEnabled() {
+    public @Nullable Boolean getAutoRelockEnabled() {
         return autoRelockEnabled;
     }
 
@@ -40,7 +44,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
     /**
      * @return the label
      */
-    public String getDeviceLabel() {
+    public @Nullable String getDeviceLabel() {
         return deviceLabel;
     }
 
@@ -54,7 +58,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
     /**
      * @return the doorLockVolumeSettings
      */
-    public DoorLockVolumeSettings getDoorLockVolumeSettings() {
+    public @Nullable DoorLockVolumeSettings getDoorLockVolumeSettings() {
         return doorLockVolumeSettings;
     }
 
@@ -67,21 +71,21 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
 
     public class DoorLockVolumeSettings {
         @SerializedName("volume")
-        private String volume;
+        private @Nullable String volume;
 
         @SerializedName("voiceLevel")
-        private String voiceLevel;
+        private @Nullable String voiceLevel;
 
         @SerializedName("active")
-        private String active;
+        private @Nullable String active;
 
         @SerializedName("availableVolumes")
-        private List<String> availableVolumes;
+        private @Nullable List<String> availableVolumes;
 
         @SerializedName("availableVoiceLevels")
-        private List<String> availableVoiceLevels;
+        private @Nullable List<String> availableVoiceLevels;
 
-        public String getVolume() {
+        public @Nullable String getVolume() {
             return volume;
         }
 
@@ -89,7 +93,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             this.volume = volume;
         }
 
-        public String getVoiceLevel() {
+        public @Nullable String getVoiceLevel() {
             return voiceLevel;
         }
 
@@ -97,7 +101,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             this.voiceLevel = voiceLevel;
         }
 
-        public String getActive() {
+        public @Nullable String getActive() {
             return active;
         }
 
@@ -105,7 +109,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             this.active = active;
         }
 
-        public List<String> getAvailableVolumes() {
+        public @Nullable List<String> getAvailableVolumes() {
             return availableVolumes;
         }
 
@@ -113,7 +117,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             this.availableVolumes = availableVolumes;
         }
 
-        public List<String> getAvailableVoiceLevels() {
+        public @Nullable List<String> getAvailableVoiceLevels() {
             return availableVoiceLevels;
         }
 
@@ -121,6 +125,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             this.availableVoiceLevels = availableVoiceLevels;
         }
 
+        @SuppressWarnings("null")
         @Override
         public int hashCode() {
             final int prime = 31;
@@ -140,7 +145,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
          * @see java.lang.Object#equals(java.lang.Object)
          */
         @Override
-        public boolean equals(Object obj) {
+        public boolean equals(@Nullable Object obj) {
             if (this == obj) {
                 return true;
             }
@@ -158,35 +163,35 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
                 if (other.active != null) {
                     return false;
                 }
-            } else if (!active.equals(other.active)) {
+            } else if (active != null && !active.equals(other.active)) {
                 return false;
             }
             if (availableVoiceLevels == null) {
                 if (other.availableVoiceLevels != null) {
                     return false;
                 }
-            } else if (!availableVoiceLevels.equals(other.availableVoiceLevels)) {
+            } else if (availableVoiceLevels != null && !availableVoiceLevels.equals(other.availableVoiceLevels)) {
                 return false;
             }
             if (availableVolumes == null) {
                 if (other.availableVolumes != null) {
                     return false;
                 }
-            } else if (!availableVolumes.equals(other.availableVolumes)) {
+            } else if (availableVolumes != null && !availableVolumes.equals(other.availableVolumes)) {
                 return false;
             }
             if (voiceLevel == null) {
                 if (other.voiceLevel != null) {
                     return false;
                 }
-            } else if (!voiceLevel.equals(other.voiceLevel)) {
+            } else if (voiceLevel != null && !voiceLevel.equals(other.voiceLevel)) {
                 return false;
             }
             if (volume == null) {
                 if (other.volume != null) {
                     return false;
                 }
-            } else if (!volume.equals(other.volume)) {
+            } else if (volume != null && !volume.equals(other.volume)) {
                 return false;
             }
             return true;
@@ -209,6 +214,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
 
     }
 
+    @SuppressWarnings("null")
     @Override
     public int hashCode() {
         final int prime = 31;
@@ -225,7 +231,7 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
      * @see java.lang.Object#equals(java.lang.Object)
      */
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (this == obj) {
             return true;
         }
@@ -240,21 +246,21 @@ public class VerisureSmartLockJSON extends VerisureAlarmJSON {
             if (other.autoRelockEnabled != null) {
                 return false;
             }
-        } else if (!autoRelockEnabled.equals(other.autoRelockEnabled)) {
+        } else if (autoRelockEnabled != null && !autoRelockEnabled.equals(other.autoRelockEnabled)) {
             return false;
         }
         if (deviceLabel == null) {
             if (other.deviceLabel != null) {
                 return false;
             }
-        } else if (!deviceLabel.equals(other.deviceLabel)) {
+        } else if (deviceLabel != null && !deviceLabel.equals(other.deviceLabel)) {
             return false;
         }
         if (doorLockVolumeSettings == null) {
             if (other.doorLockVolumeSettings != null) {
                 return false;
             }
-        } else if (!doorLockVolumeSettings.equals(other.doorLockVolumeSettings)) {
+        } else if (doorLockVolumeSettings != null && !doorLockVolumeSettings.equals(other.doorLockVolumeSettings)) {
             return false;
         }
         return true;

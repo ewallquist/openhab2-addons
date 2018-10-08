@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2010-2018 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -8,6 +8,7 @@
  */
 package org.openhab.binding.verisure;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 /**
@@ -16,6 +17,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
  *
  * @author l3rum - Initial contribution
  */
+@NonNullByDefault
 public class VerisureBindingConstants {
 
     public static final String BINDING_ID = "verisure";
@@ -75,15 +77,15 @@ public class VerisureBindingConstants {
     public static final String SMARTPLUG_COMMAND = "/settings/smartplug/onoffplug.cmd";
     public static final String START_SUF = "/uk/start.html";
 
-    public static final String ALARMSTATUS_PATH = "/remotecontrol?_=";
+    public static final String ALARMSTATUS_PATH = "/remotecontrol";
     public static final String SMARTLOCK_PATH = "/overview/doorlock/";
-    public static final String DOORWINDOW_PATH = "/settings/doorwindow?_=";
-    public static final String USERTRACKING_PATH = "/overview/usertrackingcontacts?_=";
-    public static final String CLIMATEDEVICE_PATH = "/overview/climatedevice?_=";
-    public static final String SMARTPLUG_PATH = "/settings/smartplug?_=";
-    public static final String ETHERNETSTATUS_PATH = "/overview/ethernetstatus?_=";
-    public static final String VACATIONMODE_PATH = "/overview/vacationmode?_=";
-    public static final String TEMPERATURE_CONTROL_PATH = "/overview/temperaturecontrol?_=";
-    public static final String MOUSEDETECTION_PATH = "/overview/mousedetection?_=";
-    public static final String CAMERA_PATH = "/overview/camera?_=";
+    public static final String DOORWINDOW_PATH = "/settings/doorwindow";
+    public static final String USERTRACKING_PATH = "/overview/usertrackingcontacts";
+    public static final String CLIMATEDEVICE_PATH = "/overview/climatedevice";
+    public static final String SMARTPLUG_PATH = "/settings/smartplug";
+    public static final String ETHERNETSTATUS_PATH = "/overview/ethernetstatus";
+    public static final String VACATIONMODE_PATH = "/overview/vacationmode";
+    public static final String TEMPERATURE_CONTROL_PATH = "/overview/temperaturecontrol";
+    public static final String MOUSEDETECTION_PATH = "/overview/mousedetection";
+    public static final String CAMERA_PATH = "/overview/camera";
 }
