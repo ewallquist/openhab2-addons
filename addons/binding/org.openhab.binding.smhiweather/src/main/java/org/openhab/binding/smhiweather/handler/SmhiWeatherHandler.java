@@ -127,7 +127,7 @@ public class SmhiWeatherHandler extends BaseThingHandler {
             }
         };
 
-        refreshJob = scheduler.scheduleAtFixedRate(runnable, 0, refresh.intValue(), TimeUnit.SECONDS);
+        refreshJob = scheduler.scheduleWithFixedDelay(runnable, 0, refresh.intValue(), TimeUnit.SECONDS);
     }
 
     @Override
